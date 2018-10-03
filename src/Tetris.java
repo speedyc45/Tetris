@@ -10,7 +10,6 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import javax.swing.*;
-//import java.awt.geom.*;
 
 public class Tetris {
 
@@ -26,6 +25,7 @@ class GameWindow extends JFrame{
     //
     private final static int WIDTH = 350;
     private final static int HEIGHT = 300;
+    private final int ANIMATION_REFRESH_RATE = 20;
     private PaintSurface canvas;
 
     public GameWindow() {
@@ -41,7 +41,7 @@ class GameWindow extends JFrame{
 
         //create a timer for repainting the animation every 20 (ms?)
         //credit to Java for Dummies
-        Timer t = new Timer(20, e -> {canvas.repaint();});
+        Timer t = new Timer(ANIMATION_REFRESH_RATE, e -> {canvas.repaint();});
         t.start();
 
         //make the frame (window) visible
@@ -56,15 +56,29 @@ class GameWindow extends JFrame{
         return WIDTH;
     } //end of getWIDTH method
 
+    //
+    public String toString() {
+        String report = "";
+
+        report += "-------------------------\n";
+        report += "GameWindow Object\n";
+        report += "Width: " + WIDTH + "\n";
+        report += "Height: " + HEIGHT + "\n";
+
+        return report;
+    } //end of the toString method
+
 } //end of GameWindow class
 
 class PaintSurface extends JComponent {
+    //define the necessary variables
     int x_pos = 0;
     int y_pos = 0;
     int x_speed = 2;
     int y_speed = 3;
     int d = 20;
 
+    //method for repainting the canvas
     public void paint(Graphics g) {
         //cast the graphics object as a Graphics2D object
         Graphics2D g2 = (Graphics2D)g;
@@ -89,5 +103,17 @@ class PaintSurface extends JComponent {
         g2.setColor(Color.red);
         g2.fill(ball);
     } //end of paint method
+
+    //
+    public String toString() {
+        String report = "";
+
+        report += "-------------------------\n";
+        report += "PaintSurface Object\n";
+        report += "Width: " + WIDTH + "\n";
+        report += "Height: " + HEIGHT + "\n";
+
+        return report;
+    } //end of the toString method
 
 } //end of PaintSurface class
