@@ -24,16 +24,16 @@ public class Tetris {
 } //end of main Tetris class
 
 class GameWindow extends JFrame{
-    //
-    private final static int WIDTH = 350;
-    private final static int HEIGHT = 300;
+    //initialize the necessary variables
+    private static int width = 350;
+    private static int height = 300;
     private final int ANIMATION_REFRESH_RATE = 20;
     private PaintSurface canvas;
 
     public GameWindow() {
         //set the dimensions, title, closing operation, and center it in the screen
-        this.setSize(WIDTH, HEIGHT);
-        this.setTitle("Tetris");
+        this.setSize(width, height);
+        this.setTitle("Callum's Tetris");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
@@ -57,11 +57,11 @@ class GameWindow extends JFrame{
     } //end of GameWindow constructor method
 
     public static int getHEIGHT() {
-        return HEIGHT;
+        return height;
     } //end of getHEIGHT method
 
     public static int getWIDTH() {
-        return WIDTH;
+        return width;
     } //end of getWIDTH method
 
     //
