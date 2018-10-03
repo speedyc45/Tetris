@@ -8,6 +8,8 @@
  */
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 
@@ -41,7 +43,13 @@ class GameWindow extends JFrame{
 
         //create a timer for repainting the animation every 20 (ms?)
         //credit to Java for Dummies
-        Timer t = new Timer(ANIMATION_REFRESH_RATE, e -> {canvas.repaint();});
+        Timer t = new Timer(ANIMATION_REFRESH_RATE, new ActionListener(){
+            @Override
+            public void actionPerformed (ActionEvent evt)
+            {
+                canvas.repaint();
+            }
+        });
         t.start();
 
         //make the frame (window) visible
