@@ -1,17 +1,16 @@
-/* 
- *
+/*
+ * Tetris.java
+ * Description: /TODO/
  *
  * Written by: Callum Kipin
+ * Date Started: Oct 2nd, 2018
+ * Date Finished: /TODO/
  */
 
-//import statements
-
-
-//main Tetris class
 public class Tetris {
 
-    public static main (String[] args) {
-
-
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
     } //end of main method
-} //end of Tetris class
+
+} //end of main Tetris class
