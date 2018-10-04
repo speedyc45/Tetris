@@ -52,6 +52,15 @@ class GameWindow extends JFrame{
         });
         t.start();
 
+
+        //TESTING
+        Tetrimino test = new Tetrimino(1);
+        System.out.println(test);
+        test.rotate(Tetrimino.ROTATE_LEFT);
+        System.out.println(test);
+        //TESTING
+
+
         //make the frame (window) visible
         this.setVisible(true);
     } //end of GameWindow constructor method
