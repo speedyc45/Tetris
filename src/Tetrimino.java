@@ -64,8 +64,8 @@ public class Tetrimino {
                 break;
             case 7:
                 shape = new char[][]{
-                        {'x', 'x', 'x', 'x'},
                         {'-', '-', '-', '-'},
+                        {'x', 'x', 'x', 'x'},
                         {'-', '-', '-', '-'},
                         {'-', '-', '-', '-'}
                 };
@@ -86,27 +86,59 @@ public class Tetrimino {
             if (shape[0].length == 2) {
                 //do nothing, a square can't be rotated
             } else if (shape[0].length == 3) {
+                System.out.println("Rotating a three shape left...");
+
                 //swap the placement of the blocks in the grid
                 newShape = new char[3][3];
 
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 3; x++) {
-                        if (y == 0) {
-                            newShape[y+(2-x)][y] = shape[y][x];
-                        } else if (y == 1 && x == 0) {
-                            newShape[y][2] = shape[y][x];
-                        } else if (y == 1 && x == 1) {
-                            //skip the rotation point in the shape
-                        } else if (y == 1 && x == 2) {
-                            newShape[y][0] = shape[y][x];
-                        } else if (y == 2) {
-                            newShape[x][x+(2-y)] = shape[y][x];
-                        }
-                    } //end of x for loop
-                } //end of y for loop
-                System.out.println(newShape);
-            } else if (shape[0].length == 4) {
+                //rotate the shape left one, and set it to the newShape array
+                newShape[0][0] = shape[0][2];
+                newShape[0][1] = shape[1][2];
+                newShape[0][2] = shape[2][2];
+                newShape[1][0] = shape[0][1];
+                newShape[1][1] = shape[1][1]; //redundant, but newShape must be filled
+                newShape[1][2] = shape[2][1];
+                newShape[2][0] = shape[0][0];
+                newShape[2][1] = shape[1][0];
+                newShape[2][2] = shape[2][0];
 
+                //set the original shape as the newShape
+                for (int x = 0; x < shape.length; x++) {
+                    for (int y = 0; y < shape.length; y++) {
+                        shape[x][y] = newShape[x][y];
+                    }
+                }
+
+            } else if (shape[0].length == 4) {
+                System.out.println("Rotating a four shape left...");
+
+                //swap the placement of the blocks in the grid
+                newShape = new char[4][4];
+
+                //rotate the shape left one, and set it to the newShape array
+                newShape[0][0] = '-'; //corners don't become anything
+                newShape[0][1] = shape[1][3];
+                newShape[0][2] = shape[2][3];
+                newShape[0][3] = '-'; //corners don't become anything
+                newShape[1][0] = shape[0][2];
+                newShape[1][1] = shape[1][2];
+                newShape[1][2] = shape[2][2];
+                newShape[1][3] = shape[3][2];
+                newShape[2][0] = shape[0][1];
+                newShape[2][1] = shape[1][1];
+                newShape[2][2] = shape[2][1];
+                newShape[2][3] = shape[3][1];
+                newShape[3][0] = '-'; //corners don't become anything
+                newShape[3][1] = shape[1][0];
+                newShape[3][2] = shape[2][0];
+                newShape[3][3] = '-'; //corners don't become anything
+
+                //set the original shape as the newShape
+                for (int x = 0; x < shape.length; x++) {
+                    for (int y = 0; y < shape.length; y++) {
+                        shape[x][y] = newShape[x][y];
+                    }
+                }
             }
         } else if (rotateDir == ROTATE_RIGHT) {
 
