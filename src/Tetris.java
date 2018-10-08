@@ -27,8 +27,8 @@ public class Tetris {
 class GameWindow extends JFrame{
     //initialize the necessary variables
     private static int width = 350;
-    private static int height = 375;
-    private final int ANIMATION_REFRESH_RATE = 20;
+    private static int height = 465;
+    private final int ANIMATION_REFRESH_RATE = 500;
     private PaintSurface canvas;
 
     public GameWindow() {
@@ -92,7 +92,14 @@ class GameWindow extends JFrame{
 
 class PaintSurface extends JComponent {
     //define the necessary variables
-    Image background;
+    private Image background; //note: border length is 4 pixels
+    private Image block;
+    private final int backgroundOffsetX = 5;
+    private final int backgroundOffsetY = 5;
+    private int blockPosX = backgroundOffsetX + 4;
+    private int blockPosY = backgroundOffsetY + 5;
+    private final int gridHeight = 20;
+    private int blockHeightInGrid = 1;
 
     //testing variables -NOT ACTUAL-
     /*
@@ -109,8 +116,18 @@ class PaintSurface extends JComponent {
 
     //method for repainting the canvas
     public void paint(Graphics g) {
+        //create the background Image then draw it
         background = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
-        g.drawImage(background, 5, 5, null);
+        g.drawImage(background, backgroundOffsetX, backgroundOffsetY, null);
+
+        //create a test block and draw it
+        block = new ImageIcon("assets\\Tetris_Block_Blue.png").getImage();
+        g.drawImage(block, blockPosX, blockPosY, null);
+
+        if (blockHeightInGrid < gridHeight) {
+            blockPosY += 20;
+            blockHeightInGrid++;
+        }
 
     } //end of paint method
 
