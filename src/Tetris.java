@@ -10,8 +10,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.ImageObserver;
 import javax.swing.*;
 
 public class Tetris {
@@ -28,7 +26,7 @@ class GameWindow extends JFrame{
     //initialize the necessary variables
     private static int width = 350;
     private static int height = 465;
-    private final int ANIMATION_REFRESH_RATE = 500;
+    private final int ANIMATION_REFRESH_RATE = 5000;
     private PaintSurface canvas;
 
     public GameWindow() {
@@ -53,16 +51,8 @@ class GameWindow extends JFrame{
         });
         t.start();
 
-
-        //---------------TESTING---------------
+        //TESTING STATEMENTS
         Tetrimino test = new Tetrimino(7);
-        System.out.println(test);
-        for (int x = 0; x < 4; x++) {
-            test.rotate(Tetrimino.ROTATE_LEFT);
-            System.out.println(test);
-        }
-        //---------------TESTING---------------
-
 
         //make the frame (window) visible
         this.setVisible(true);
@@ -98,8 +88,7 @@ class PaintSurface extends JComponent {
     private final int backgroundOffsetY = 5;
     private int blockPosX = backgroundOffsetX + 4;
     private int blockPosY = backgroundOffsetY + 5;
-    private final int gridHeight = 20;
-    private int blockHeightInGrid = 1;
+    private Board tetrisBoard = new Board();
 
     //testing variables -NOT ACTUAL-
     /*
@@ -120,61 +109,56 @@ class PaintSurface extends JComponent {
         background = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
         g.drawImage(background, backgroundOffsetX, backgroundOffsetY, null);
 
-        //create a test block and draw it
-        block = new ImageIcon("assets\\Tetris_Block_Blue.png").getImage();
-        g.drawImage(block, blockPosX, blockPosY, null);
-
-        if (blockHeightInGrid < gridHeight) {
-            blockPosY += 20;
-            blockHeightInGrid++;
+        //draw the board
+        for (int x = 0; x < Board.ROWS; x++) {
+            for (int y = 0; y < Board.COLUMNS; y++) {
+                switch (tetrisBoard.getBoardArray()[x][y]) {
+                    case 0:
+                        //no block, do nothing
+                        break;
+                    case 1:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockBlue.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    case 2:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockOrange.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    case 3:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockYellow.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    case 4:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockGreen.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    case 5:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockPink.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    case 6:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockPurple.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    case 7:
+                        System.out.println("Displaying block at x: " + x + ", y: " + y);
+                        block = Board.blockLightBlue.getImage();
+                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
+                        break;
+                    default:
+                        //TODO ERROR!
+                        break;
+                }
+            }
         }
 
     } //end of paint method
-
-
-    //testing paint method -NOT ACTUAL-
-    /*
-    public void paint(Graphics g) {
-        //cast the graphics object as a Graphics2D object
-        Graphics2D g2 = (Graphics2D)g;
-
-        //set antialiasing to on (smooths lines to remove jagged edges)
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        //check to see if the ball hit any boundaries of the window
-        if (x_pos < 0 || x_pos > GameWindow.getWIDTH() - 1.8*d) {
-            x_speed = -x_speed;
-        }
-        if (y_pos < 0 || y_pos > GameWindow.getHEIGHT() - 2.8*d) {
-            y_speed = -y_speed;
-        }
-
-        //check to see if ball2 hit any boundaries of the window
-        if (x_pos2 < 0 || x_pos2 > GameWindow.getWIDTH() - 1.8*d) {
-            x_speed2 = -x_speed2;
-        }
-        if (y_pos2 < 0 || y_pos2 > GameWindow.getHEIGHT() - 2.8*d) {
-            y_speed2 = -y_speed2;
-        }
-
-        //move the balls
-        x_pos += x_speed;
-        y_pos += y_speed;
-
-        x_pos2 += x_speed2;
-        y_pos2 += y_speed2;
-
-        //create the new ball, and set its colour to red
-        Shape ball = new Ellipse2D.Float(x_pos, y_pos, d, d);
-        g2.setColor(Color.red);
-        g2.fill(ball);
-
-        //create the new ball, and set its colour to red
-        Shape ball2 = new Ellipse2D.Float(x_pos2, y_pos2, d, d);
-        g2.setColor(Color.blue);
-        g2.fill(ball2);
-    } //end of paint method
-    */
 
     //
     public String toString() {
