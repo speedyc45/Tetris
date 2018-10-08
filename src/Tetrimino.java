@@ -3,7 +3,6 @@
 //
 public class Tetrimino {
     //initialize the necessary variables
-    private Block[] blocks;
     private char[][] shape;
     private int shapeNum;
     public static final int ROTATE_LEFT = 0;

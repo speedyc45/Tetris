@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.ImageObserver;
 import javax.swing.*;
 
 public class Tetris {
@@ -26,7 +27,7 @@ public class Tetris {
 class GameWindow extends JFrame{
     //initialize the necessary variables
     private static int width = 350;
-    private static int height = 300;
+    private static int height = 375;
     private final int ANIMATION_REFRESH_RATE = 20;
     private PaintSurface canvas;
 
@@ -91,13 +92,31 @@ class GameWindow extends JFrame{
 
 class PaintSurface extends JComponent {
     //define the necessary variables
+    Image background;
+
+    //testing variables -NOT ACTUAL-
+    /*
     int x_pos = 0;
     int y_pos = 0;
+    int x_pos2 = 20;
+    int y_pos2 = 30;
     int x_speed = 2;
     int y_speed = 3;
+    int x_speed2 = 2;
+    int y_speed2 = 3;
     int d = 20;
+    */
 
     //method for repainting the canvas
+    public void paint(Graphics g) {
+        background = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
+        g.drawImage(background, 5, 5, null);
+
+    } //end of paint method
+
+
+    //testing paint method -NOT ACTUAL-
+    /*
     public void paint(Graphics g) {
         //cast the graphics object as a Graphics2D object
         Graphics2D g2 = (Graphics2D)g;
@@ -113,15 +132,32 @@ class PaintSurface extends JComponent {
             y_speed = -y_speed;
         }
 
-        //move the ball
+        //check to see if ball2 hit any boundaries of the window
+        if (x_pos2 < 0 || x_pos2 > GameWindow.getWIDTH() - 1.8*d) {
+            x_speed2 = -x_speed2;
+        }
+        if (y_pos2 < 0 || y_pos2 > GameWindow.getHEIGHT() - 2.8*d) {
+            y_speed2 = -y_speed2;
+        }
+
+        //move the balls
         x_pos += x_speed;
         y_pos += y_speed;
+
+        x_pos2 += x_speed2;
+        y_pos2 += y_speed2;
 
         //create the new ball, and set its colour to red
         Shape ball = new Ellipse2D.Float(x_pos, y_pos, d, d);
         g2.setColor(Color.red);
         g2.fill(ball);
+
+        //create the new ball, and set its colour to red
+        Shape ball2 = new Ellipse2D.Float(x_pos2, y_pos2, d, d);
+        g2.setColor(Color.blue);
+        g2.fill(ball2);
     } //end of paint method
+    */
 
     //
     public String toString() {
