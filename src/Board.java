@@ -3,7 +3,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-//class that manages the tetris board
+//class that manages the tetris game board
 public class Board {
     //initialize the necessary variables
     public static final int COLUMNS = 10;
@@ -61,6 +61,7 @@ public class Board {
                     }
                 } //end of y loop
             } //end of OUTER loop
+
         } else if (t.getSize() == 3) {
             OUTER: for (int x = 0; x < 2; x++) {
                 for (int y = 0; y < t.getSize(); y++) {
@@ -70,6 +71,7 @@ public class Board {
                     }
                 } //end of y loop
             } //end of OUTER loop
+
         } else if (t.getSize() == 4) {
             OUTER: for (int x = 0; x < 2; x++) {
                 for (int y = 0; y < t.getSize(); y++) {
@@ -88,17 +90,111 @@ public class Board {
         //if the tetrimino can be added
         if (addTetriminoCheck(t)) {
             System.out.println("Add tetrimino: true");
-            //add the tetrimino to the board array
-            for (int x = 0; x < 2; x++) {
+
+            //if the tetrimino is the cube, spawn it in the center
+            if (t.getSize() == 2) {
+                //set the tetrimino's location
+                t.setxCoord(4);
+                t.setyCoord(0);
+
+                //add the tetrimino to the board array
+                for (int x = 0; x < 2; x++) {
+                    for (int y = 0; y < t.getSize(); y++) {
+                        boardArray[x][y+4] = t.getShape()[x][y];
+                    }
+                }
+            } else if(t.getSize() == 3) { //if the tetrimino is a standard 3 size, spawn in the default location
+                //set the tetrimino's location
+                t.setxCoord(3);
+                t.setyCoord(0);
+
+                //add the tetrimino to the board array
+                for (int x = 0; x < 2; x++) {
+                    for (int y = 0; y < t.getSize(); y++) {
+                        boardArray[x][y+3] = t.getShape()[x][y];
+                    }
+                }
+            } else if(t.getSize() == 4) { //if the tetrimino is a line piece, spawn on the top row
+                //set the tetrimino's location
+                t.setxCoord(3);
+                t.setyCoord(0);
+
+                //add the tetrimino to the board array
                 for (int y = 0; y < t.getSize(); y++) {
-                    boardArray[x][y+3] = t.getShape()[x][y];
+                    boardArray[0][y+3] = t.getShape()[1][y];
                 }
             }
+
         } else {
             System.out.println("Add tetrimino: false");
         }
 
     } //end of addTetrimino method
+
+    //updates the board (moves blocks if necessary)
+    public static void tetriminoDrop(Tetrimino t) {
+        System.out.println("Attempting to drop tetrimino...");
+
+        int size = t.getSize();
+        int xCoord = t.getxCoord();
+        int yCoord = t.getyCoord();
+
+        if (tetriminoDropCheck(t)) {
+            System.out.println("Valid drop. Dropping tetrimino now...");
+
+            if (size == 2) {
+                System.out.println("ROW: " + yCoord + " COL:" + xCoord);
+                //clear the top of the square
+                boardArray[yCoord][xCoord] = 0;
+                boardArray[yCoord][xCoord+1] = 0;
+
+                //add the bottom of the square
+                boardArray[yCoord+2][xCoord] = 3;
+                boardArray[yCoord+2][xCoord+1] = 3;
+
+                //update the location
+                t.setyCoord(yCoord+1);
+            }
+        } else {
+            //if the tetrimino can no longer fall, spawn another
+            System.out.println("Tetrimino can no longer fall, spawning a new block...");
+            GameWindow.newTetrimino();
+        }
+
+    } //end of update method
+
+    private static boolean tetriminoDropCheck(Tetrimino t) {
+        int shapeNum = t.getShapeNum();
+        int xCoord = t.getxCoord();
+        int yCoord = t.getyCoord();
+
+        //check the shape of the tetrimino, and search for any conflicts (depending on the shape)
+        switch (shapeNum) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                //check if there are any blocks beneath the tetrimino
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 && boardArray[yCoord+2][xCoord+1] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            default:
+                return false;
+        } //end of shapeNum switch statement
+
+        return false;
+    }
 
     public int[][] getBoardArray() {
         return boardArray;
