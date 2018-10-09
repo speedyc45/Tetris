@@ -28,7 +28,10 @@ class GameWindow extends JFrame{
     private static int height = 465;
     private final int ANIMATION_REFRESH_RATE = 100;
     private static final int DROP_SPEED = 1000;
+    private static boolean gameStart = false;
     private PaintSurface canvas;
+    private static Tetrimino current;
+    private static Timer t2;
 
     public GameWindow() {
         //set the dimensions, title, closing operation, and center it in the screen
@@ -61,16 +64,19 @@ class GameWindow extends JFrame{
 
     //
     public static void newTetrimino() {
-        Tetrimino current = new Tetrimino(3);
+        current = new Tetrimino((int)Math.floor(Math.random() * 7));
 
-        Timer t2 = new Timer(DROP_SPEED, new ActionListener(){
-            @Override
-            public void actionPerformed (ActionEvent evt)
-            {
-                Board.tetriminoDrop(current);
-            }
-        });
-        t2.start();
+        if (!gameStart) {
+            t2 = new Timer(DROP_SPEED, new ActionListener(){
+                @Override
+                public void actionPerformed (ActionEvent evt)
+                {
+                    Board.tetriminoDrop(current);
+                }
+            });
+            t2.start();
+            gameStart = true;
+        }
     }
 
     public static int getHEIGHT() {

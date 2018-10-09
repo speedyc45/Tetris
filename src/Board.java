@@ -43,12 +43,15 @@ public class Board {
         }
 
         //test print of validSpawnLocations array------------------
+        System.out.println("validSpawnLocationsArray:");
         for (int x = 0; x < validSpawnLocations.length; x++) {
             for (int y = 0; y < validSpawnLocations[0].length; y++) {
                 System.out.print(validSpawnLocations[x][y]);
             }
             System.out.println();
-        } //test print -----------------
+        }
+        System.out.println("validSpawnLocationsArray - end");
+        //test print -----------------
 
         //check if the tetrimino can spawn /TODO - add specific shape checking!/
         if (t.getSize() == 2) {
@@ -56,6 +59,7 @@ public class Board {
             OUTER: for (int x = 0; x < 2; x++) {
                 for (int y = 1; y < t.getSize(); y++) {
                     if (validSpawnLocations[x][y] != 0) {
+                        System.out.println("Row: " + x + " Col: " + y);
                         validSpawn = false;
                         break OUTER;
                     }
@@ -82,7 +86,9 @@ public class Board {
                 } //end of y loop
             } //end of OUTER loop
         }
-            return validSpawn;
+
+        System.out.println("addTetriminoCheck returning: " + validSpawn);
+        return validSpawn;
     } //end of addTetriminoCheck method
 
     //adds a tetrimino block to the board /TODO shape specific addition
@@ -142,6 +148,7 @@ public class Board {
         if (tetriminoDropCheck(t)) {
             System.out.println("Valid drop. Dropping tetrimino now...");
 
+            //if it's the square, drop it
             if (size == 2) {
                 System.out.println("ROW: " + yCoord + " COL:" + xCoord);
                 //clear the top of the square
@@ -154,6 +161,12 @@ public class Board {
 
                 //update the location
                 t.setyCoord(yCoord+1);
+            //if it's a standard block (not the square or line), drop it
+            } else if (size == 3) {
+                //TODO-----------------------------------------------------
+            //if it's the line, drop it
+            } else if (size == 4) {
+                //TODO-----------------------------------------------------
             }
         } else {
             //if the tetrimino can no longer fall, spawn another
@@ -171,29 +184,56 @@ public class Board {
         //check the shape of the tetrimino, and search for any conflicts (depending on the shape)
         switch (shapeNum) {
             case 1:
-                break;
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 &&
+                        boardArray[yCoord+2][xCoord+1] == 0 && boardArray[yCoord+2][xCoord+2] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             case 2:
-                break;
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 &&
+                        boardArray[yCoord+2][xCoord+1] == 0 && boardArray[yCoord+2][xCoord+2] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             case 3:
-                //check if there are any blocks beneath the tetrimino
                 if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 && boardArray[yCoord+2][xCoord+1] == 0) {
                     return true;
                 } else {
                     return false;
                 }
             case 4:
-                break;
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 && boardArray[yCoord+2][xCoord+1] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             case 5:
-                break;
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 &&
+                        boardArray[yCoord+2][xCoord+1] == 0 && boardArray[yCoord+2][xCoord+2] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             case 6:
-                break;
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord+1] == 0 &&
+                        boardArray[yCoord+2][xCoord+2] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             case 7:
-                break;
+                if (yCoord+2 < boardArray.length && boardArray[yCoord+2][xCoord] == 0 &&
+                        boardArray[yCoord+2][xCoord+1] == 0 && boardArray[yCoord+2][xCoord+2] == 0
+                        && boardArray[yCoord+2][xCoord+3] == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             default:
                 return false;
         } //end of shapeNum switch statement
-
-        return false;
     }
 
     public int[][] getBoardArray() {
