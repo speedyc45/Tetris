@@ -10,6 +10,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 public class Tetris {
@@ -43,6 +44,7 @@ class GameWindow extends JFrame{
         //make a canvas for animating and add it to the frame
         canvas = new PaintSurface();
         this.add(canvas, BorderLayout.CENTER);
+        this.addKeyListener(new KeyListener());
 
         //create a timer for repainting the animation every 20 (ms?)
         //credit to Java for Dummies
@@ -77,6 +79,11 @@ class GameWindow extends JFrame{
             t2.start();
             gameStart = true;
         }
+    }
+
+    //
+    public static void rotateTetrimino(int dir) {
+        current.rotate(dir);
     }
 
     public static int getHEIGHT() {
@@ -187,3 +194,21 @@ class PaintSurface extends JComponent {
     } //end of the toString method
 
 } //end of PaintSurface class
+
+//handles key input
+class KeyListener implements java.awt.event.KeyListener {
+
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    public void keyPressed(KeyEvent e ) {
+        if (e.getKeyCode() == e.VK_KP_LEFT) {
+            GameWindow.rotateTetrimino(Tetrimino.ROTATE_LEFT);
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+
+    }
+}
