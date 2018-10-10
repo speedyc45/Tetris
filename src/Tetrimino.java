@@ -1,11 +1,13 @@
 //
 
-//
+//class that represents a "Tetrimino" - a falling block within the Tetris game
 public class Tetrimino {
     //initialize the necessary variables
     private int[][] shape;
     private int shapeNum;
     private int size;
+    private int xCoord; //coordinates for block of the top left point
+    private int yCoord; //(according to their layouts, as shown below, even if it isn't a block!)
     public static final int ROTATE_LEFT = 0;
     public static final int ROTATE_RIGHT = 1;
 
@@ -160,16 +162,23 @@ public class Tetrimino {
 
     public int getShapeNum() {
         return this.shapeNum;
-    } //end of getShapeNum() method
+    }
 
     public int getSize() {
         return this.size;
-    } //end of getSize() method
+    }
 
     public int[][] getShape() {
         return this.shape;
     }
 
+    public int getxCoord() {return xCoord;}
+
+    public int getyCoord() {return yCoord;}
+
+    public void setxCoord(int x) {this.xCoord = x;}
+
+    public void setyCoord(int y) {this.yCoord = y;}
     //
     public String toString() {
         String report = "";

@@ -26,8 +26,12 @@ class GameWindow extends JFrame{
     //initialize the necessary variables
     private static int width = 350;
     private static int height = 465;
-    private final int ANIMATION_REFRESH_RATE = 5000;
+    private final int ANIMATION_REFRESH_RATE = 100;
+    private static final int DROP_SPEED = 1000;
+    private static boolean gameStart = false;
     private PaintSurface canvas;
+    private static Tetrimino current;
+    private static Timer t2;
 
     public GameWindow() {
         //set the dimensions, title, closing operation, and center it in the screen
@@ -51,12 +55,29 @@ class GameWindow extends JFrame{
         });
         t.start();
 
-        //TESTING STATEMENTS
-        Tetrimino test = new Tetrimino(7);
+        //create a new tetrimino to start the game
+        newTetrimino();
 
         //make the frame (window) visible
         this.setVisible(true);
     } //end of GameWindow constructor method
+
+    //
+    public static void newTetrimino() {
+        current = new Tetrimino((int)Math.floor(Math.random() * 7));
+
+        if (!gameStart) {
+            t2 = new Timer(DROP_SPEED, new ActionListener(){
+                @Override
+                public void actionPerformed (ActionEvent evt)
+                {
+                    Board.tetriminoDrop(current);
+                }
+            });
+            t2.start();
+            gameStart = true;
+        }
+    }
 
     public static int getHEIGHT() {
         return height;
@@ -109,7 +130,7 @@ class PaintSurface extends JComponent {
         background = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
         g.drawImage(background, backgroundOffsetX, backgroundOffsetY, null);
 
-        //draw the board
+        //draw the board (check for any values in the board, and draw the correct block for it - in the correct position)
         for (int x = 0; x < Board.ROWS; x++) {
             for (int y = 0; y < Board.COLUMNS; y++) {
                 switch (tetrisBoard.getBoardArray()[x][y]) {
@@ -117,37 +138,30 @@ class PaintSurface extends JComponent {
                         //no block, do nothing
                         break;
                     case 1:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockBlue.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
                     case 2:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockOrange.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
                     case 3:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockYellow.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
                     case 4:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockGreen.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
                     case 5:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockPink.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
                     case 6:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockPurple.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
                     case 7:
-                        System.out.println("Displaying block at x: " + x + ", y: " + y);
                         block = Board.blockLightBlue.getImage();
                         g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
                         break;
