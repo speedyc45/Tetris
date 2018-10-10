@@ -30,6 +30,8 @@ public class Tetrimino {
                         {0, 0, 0}
                 };
                 size = 3;
+                xCoord = 3;
+                yCoord = 0;
                 break;
             case 2:
                 shape = new int[][]{
@@ -38,6 +40,8 @@ public class Tetrimino {
                         {0, 0, 0}
                 };
                 size = 3;
+                xCoord = 3;
+                yCoord = 0;
                 break;
             case 3:
                 shape = new int[][]{
@@ -45,6 +49,8 @@ public class Tetrimino {
                         {3, 3}
                 };
                 size = 2;
+                xCoord = 4;
+                yCoord = 0;
                 break;
             case 4:
                 shape = new int[][]{
@@ -53,6 +59,8 @@ public class Tetrimino {
                         {0, 0, 0}
                 };
                 size = 3;
+                xCoord = 3;
+                yCoord = 0;
                 break;
             case 5:
                 shape = new int[][]{
@@ -61,6 +69,8 @@ public class Tetrimino {
                         {0, 0, 0}
                 };
                 size = 3;
+                xCoord = 3;
+                yCoord = 0;
                 break;
             case 6:
                 shape = new int[][]{
@@ -69,6 +79,8 @@ public class Tetrimino {
                         {0, 0, 0}
                 };
                 size = 3;
+                xCoord = 3;
+                yCoord = 0;
                 break;
             case 7:
                 shape = new int[][]{
@@ -78,6 +90,8 @@ public class Tetrimino {
                         {0, 0, 0, 0}
                 };
                 size = 4;
+                xCoord = 3;
+                yCoord = 0;
                 break;
             default:
                 shape = new int[][]{
@@ -86,8 +100,14 @@ public class Tetrimino {
                         {0, 0, 0}
                 };
                 size = 3;
+                xCoord = 3;
+                yCoord = 0;
                 break;
         } //end of shape deciding switch statement
+
+        //test print statement
+        System.out.println("New Block - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size + "Shape:" + shapeNum);
+
         Board.addTetrimino(this);
 
     } //end of Tetrimino(int shapeNum) constructor

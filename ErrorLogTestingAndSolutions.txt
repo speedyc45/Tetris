@@ -1,0 +1,15 @@
+Debuggin Log for Tetris.java
+
+I encountered numerous errors when developing this game, mostly due to logical errors within my code. Here are a few:
+
+1) The Board.java class will run a seemingly impossible to reach statement that reaches an out of bounds array location in the game board. The "tetriminoDropCheck" method 
+   checks if the block is near the edge, passes it, and then an exception was reached in the "tetriminoDrop" method.
+Solution: Upon further investingating, I remembered that the shape arrays for the Tetrimino class often have a blank section at the bottom (to allow rotation). If a block
+	  is above that blank section, the "tetriminoDropCheck" will allow it to drop (as it is still valid), but the "tetriminoDrop" method will try to update the array
+	  entirely, including the "out of bounds" blank section. As such, modifying the if statement in the "tetriminoDrop" method easily prevents this from occurring.
+
+2) The Board.java class will attempt to search beneath a block for any conflicts (collisions) in the "tetriminoDropCheck" method. However, upon running the method, it appears
+   to ignore blocks that clearly would be considered a "collision", and the falling tetrimino fazes through it.
+Solution: Upon reviewing my code, I realized that the "tetriminoDropCheck" method was not viewing the correct row, but also may view itself as a collision. As such, I reworked
+	  the "tetriminoDrop" method to erase the existing block, before performing the check, and then recreating it (either one down, if valid, or in the same place, if not
+	  valid)

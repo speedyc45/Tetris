@@ -27,7 +27,7 @@ class GameWindow extends JFrame{
     private static int width = 350;
     private static int height = 465;
     private final int ANIMATION_REFRESH_RATE = 100;
-    private static final int DROP_SPEED = 1000;
+    private static final int DROP_SPEED = 400;
     private static boolean gameStart = false;
     private PaintSurface canvas;
     private static Tetrimino current;
