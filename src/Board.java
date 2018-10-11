@@ -119,7 +119,7 @@ public class Board {
 
     //updates the board (moves blocks if necessary)
     public static void tetriminoDrop(Tetrimino t) {
-        System.out.println("Attempting to drop tetrimino...");
+        //System.out.println("Attempting to drop tetrimino...");
 
         int size = t.getSize();
         int xCoord = t.getxCoord();
@@ -151,8 +151,8 @@ public class Board {
 
 
         if (tetriminoDropCheck(t)) {
-            System.out.println("Valid drop. Dropping tetrimino now...");
-            System.out.println("Old - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size);
+            //System.out.println("Valid drop. Dropping tetrimino now...");
+            //System.out.println("Old - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size);
 
             //if it's the square, drop it
             if (size == 2) {
@@ -183,7 +183,7 @@ public class Board {
             }
 
             //test print statement
-            System.out.println("New - ROW: " + t.getyCoord() + " COL:" + t.getxCoord() + " Size:" + size);
+            //System.out.println("New - ROW: " + t.getyCoord() + " COL:" + t.getxCoord() + " Size:" + size);
 
         } else {
             //if the tetrimino can no longer fall, recreate it, then spawn another
@@ -224,14 +224,13 @@ public class Board {
 
         //check for the bottom of the grid
         for (int col = 0; col < t.getShape()[0].length; col++) {
-
-            if (yCoord+t.getSize()-1 == boardArray.length) {
+            if (t.getShape()[t.getSize()-1][col] != 0 && yCoord + t.getSize()-1 == boardArray.length) {
                 System.out.println("Will return false - edge of grid");
                 return false;
             }
         }
 
-        //TESTING
+        //
         for (int row = 0; row < t.getShape().length; row++) {
             for (int col = 0; col < t.getShape()[0].length; col++) {
                 //if the shape has a value, create a block where the corresponding value on the board array would be
@@ -241,21 +240,8 @@ public class Board {
                 }
             }
         }
-        //TESTING
 
-        /*
-        //check for other blocks
-        for (int col = 0; col < t.getShape()[0].length; col++) {
-
-            System.out.println("boardArray[" + (yCoord+t.getSize()-1) + "][" + (xCoord+col) + "] != 0 && t.getShape()[" + (t.getSize()-1) + "][" + col + "] != 0");
-
-            if (boardArray[yCoord+t.getSize()-1][xCoord+col] != 0 && t.getShape()[t.getSize()-1][col] != 0) {
-                System.out.println("Will return false - block collision");
-                return false;
-            }
-        }*/
-
-        System.out.println("Will return true...");
+        //System.out.println("Will return true...");
         return true;
     }
 

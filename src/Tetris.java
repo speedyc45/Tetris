@@ -197,18 +197,26 @@ class PaintSurface extends JComponent {
 
 //handles key input
 class KeyListener implements java.awt.event.KeyListener {
+    private static boolean releaseKey = false;
 
     public void keyTyped(KeyEvent e) {
 
     }
 
     public void keyPressed(KeyEvent e ) {
-        if (e.getKeyCode() == e.VK_KP_LEFT) {
+        System.out.println("Attempting to rotate tetrimino...");
+        if (e.getKeyCode() == 37 && !releaseKey) { //check for the left arrow key, and if it's being pressed again
+            System.out.println("Rotating the tetrimino left...");
             GameWindow.rotateTetrimino(Tetrimino.ROTATE_LEFT);
+            releaseKey = true;
         }
+        System.out.println("KEY CODE: " + e.getKeyCode());
+        System.out.println("KEY CODE VK_KP_LEFT: " + e.VK_KP_LEFT);
     }
 
     public void keyReleased(KeyEvent e) {
-
+        if (e.getKeyCode() == 37) { //check for the left arrow key
+            releaseKey = false;
+        }
     }
 }
