@@ -139,7 +139,9 @@ public class Tetrimino {
                 for (int x = 0; x < shape.length; x++) {
                     for (int y = 0; y < shape.length; y++) {
                         shape[x][y] = newShape[x][y];
+                        System.out.print(shape[x][y]);
                     }
+                    System.out.println();
                 }
 
             } else if (shape[0].length == 4) {
@@ -170,7 +172,9 @@ public class Tetrimino {
                 for (int x = 0; x < shape.length; x++) {
                     for (int y = 0; y < shape.length; y++) {
                         shape[x][y] = newShape[x][y];
+                        System.out.print(shape[x][y]);
                     }
+                    System.out.println();
                 }
             }
         } else if (rotateDir == ROTATE_RIGHT) {

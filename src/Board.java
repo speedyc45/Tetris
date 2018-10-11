@@ -76,7 +76,7 @@ public class Board {
             } //end of OUTER loop
         }
 
-        System.out.println("addTetriminoCheck returning: " + validSpawn);
+        //System.out.println("addTetriminoCheck returning: " + validSpawn);
         return validSpawn;
     } //end of addTetriminoCheck method
 
@@ -84,7 +84,7 @@ public class Board {
     public static void addTetrimino(Tetrimino t) {
         //if the tetrimino can be added
         if (addTetriminoCheck(t)) {
-            System.out.println("Add tetrimino: true");
+            //System.out.println("Add tetrimino: true");
 
             //if the tetrimino is the cube, spawn it in the center
             if (t.getSize() == 2) {
