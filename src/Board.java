@@ -221,19 +221,38 @@ public class Board {
     private static boolean tetriminoDropCheck(Tetrimino t) {
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
+        int lowestBlockHeight = 0;
 
-        //check for the bottom of the grid
-        for (int col = 0; col < t.getShape()[0].length; col++) {
-            if (t.getShape()[t.getSize()-1][col] != 0 && yCoord + t.getSize()-1 == boardArray.length) {
-                System.out.println("Will return false - edge of grid");
-                return false;
+        //check for impossibilities
+        //first: find the lowest block in the tetrimino, check if it will go past the bottom of the grid
+        Outer: for (int bottomRow = t.getSize()-1; bottomRow > 0; bottomRow--) {
+            for (int col = 0; col < t.getShape()[0].length; col++) {
+                if (t.getShape()[bottomRow][col] != 0) {
+                    if (bottomRow + yCoord + 1 >= boardArray.length) {
+                        return false;
+                    } else {
+                        System.out.println("Found block at " + bottomRow + " local, or " + (bottomRow+yCoord) +
+                                " on grid. Did not go past boundary.");
+                        break Outer;
+                    }
+                }
             }
         }
 
-        //
+        /*
+        for (int row = 0, bottomRow = t.getSize()-1; row < t.getShape().length; row++, bottomRow--) {
+            for (int col = 0; col < t.getShape()[0].length; col++) {
+                if (t.getShape()[row][col] != 0 && yCoord + t.getSize()-(bottomRow+1) >= boardArray.length) {
+                    System.out.println("Will return false - edge of grid");
+                    return false;
+                }
+                System.out.println(yCoord + t.getSize()-1);
+            }
+        }*/
+
+        //second: check for a block collision
         for (int row = 0; row < t.getShape().length; row++) {
             for (int col = 0; col < t.getShape()[0].length; col++) {
-                //if the shape has a value, create a block where the corresponding value on the board array would be
                 if (t.getShape()[row][col] != 0 && boardArray[yCoord+row+1][xCoord+col] != 0) {
                     System.out.println("Will return false - block collision");
                     return false;
