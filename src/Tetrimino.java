@@ -112,10 +112,23 @@ public class Tetrimino {
 
     } //end of Tetrimino(int shapeNum) constructor
 
-    //
+    //rotates a Tetriminos shape so that it pivots upon the central axis 90deg left
+    //based on this image: https://vignette.wikia.nocookie.net/tetrisconcept/images/3/3d/SRS-pieces.png/revision/latest?cb=20060626173148
     public void rotate(int rotateDir) {
         int[][] newShape;
+        int rotateLeftCounter = 0;
+
+        //first, erase the existing Tetrimino
+        Board.erase(this);
+
+        //then rotate its shape array
         if (rotateDir == ROTATE_LEFT) {
+            rotateLeftCounter = 1;
+        } else if (rotateDir == ROTATE_RIGHT) {
+            rotateLeftCounter = 3;
+        }
+
+        for (; rotateLeftCounter > 0; rotateLeftCounter--) {
             if (shape[0].length == 2) {
                 //do nothing, a square can't be rotated
             } else if (shape[0].length == 3) {
@@ -139,11 +152,8 @@ public class Tetrimino {
                 for (int x = 0; x < shape.length; x++) {
                     for (int y = 0; y < shape.length; y++) {
                         shape[x][y] = newShape[x][y];
-                        System.out.print(shape[x][y]);
                     }
-                    System.out.println();
                 }
-
             } else if (shape[0].length == 4) {
                 System.out.println("Rotating a four shape left...");
 
@@ -172,15 +182,13 @@ public class Tetrimino {
                 for (int x = 0; x < shape.length; x++) {
                     for (int y = 0; y < shape.length; y++) {
                         shape[x][y] = newShape[x][y];
-                        System.out.print(shape[x][y]);
                     }
-                    System.out.println();
                 }
             }
-        } else if (rotateDir == ROTATE_RIGHT) {
+        } //end of rotation loop
 
-        }
-
+        //last, redraw the tetrimino
+        Board.reDraw(this);
 
     } //end of rotate method
 

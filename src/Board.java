@@ -119,96 +119,29 @@ public class Board {
 
     //updates the board (moves blocks if necessary)
     public static void tetriminoDrop(Tetrimino t) {
-        //System.out.println("Attempting to drop tetrimino...");
-
         int size = t.getSize();
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
 
         //erase the previous block
-        //if it's the square, drop it
-        if (size == 2) {
-            //erase the square
-            boardArray[yCoord][xCoord] = 0;
-            boardArray[yCoord][xCoord+1] = 0;
-            boardArray[yCoord+1][xCoord] = 0;
-            boardArray[yCoord+1][xCoord+1] = 0;
-
-            //if it's a standard block (not the square or line), drop it
-        } else if (size == 3 || size == 4) {
-            //erase the existing tetrimino
-            for (int row = 0; row < t.getShape().length; row++) {
-                for (int col = 0; col < t.getShape()[0].length; col++) {
-                    //if the shape has a value, erase where the corresponding value on the board array would be
-                    if (t.getShape()[row][col] != 0) {
-                        boardArray[yCoord+row][xCoord+col] = 0;
-                    }
-                }
-            }
-        } else {
-            System.out.println("Error: size impossible");
-        }
-
+        erase(t);
 
         if (tetriminoDropCheck(t)) {
             //System.out.println("Valid drop. Dropping tetrimino now...");
             //System.out.println("Old - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size);
 
-            //if it's the square, drop it
-            if (size == 2) {
-                //recreate the square down one row
-                boardArray[yCoord+1][xCoord] = 3;
-                boardArray[yCoord+1][xCoord+1] = 3;
-                boardArray[yCoord+2][xCoord] = 3;
-                boardArray[yCoord+2][xCoord+1] = 3;
+            //update the location
+            t.setyCoord(yCoord+1);
 
-                //update the location
-                t.setyCoord(yCoord+1);
-            //if it's another block, recreate it down one row
-            } else if (size == 3 || size == 4) {
-                //create the new tetrimino
-                for (int row = 0; row < t.getShape().length; row++) {
-                    for (int col = 0; col < t.getShape()[0].length; col++) {
-                        //if the shape has a value, create a block where the corresponding value on the board array would be
-                        if (t.getShape()[row][col] != 0) {
-                            boardArray[yCoord+row+1][xCoord+col] = t.getShape()[row][col];
-                        }
-                    }
-                }
-
-                //update the location
-                t.setyCoord(yCoord+1);
-            } else {
-                System.out.println("Error: size impossible");
-            }
+            //redraw the tetrimino that was erased
+            reDraw(t);
 
             //test print statement
             //System.out.println("New - ROW: " + t.getyCoord() + " COL:" + t.getxCoord() + " Size:" + size);
 
         } else {
-            //if the tetrimino can no longer fall, recreate it, then spawn another
-            if (size == 2) {
-                //recreate the square
-                boardArray[yCoord][xCoord] = 3;
-                boardArray[yCoord][xCoord+1] = 3;
-                boardArray[yCoord+1][xCoord] = 3;
-                boardArray[yCoord+1][xCoord+1] = 3;
-
-                //if it's a standard block (not the square or line), drop it
-            } else if (size == 3 || size == 4) {
-                //create the new tetrimino
-                for (int row = 0; row < t.getShape().length; row++) {
-                    for (int col = 0; col < t.getShape()[0].length; col++) {
-                        //if the shape has a value, create a block where the corresponding value on the board array would be
-                        if (t.getShape()[row][col] != 0) {
-                            boardArray[yCoord+row][xCoord+col] = t.getShape()[row][col];
-                        }
-                    }
-                }
-                //if it's the line, drop it
-            } else {
-                System.out.println("Error: size impossible");
-            }
+            //redraw the tetrimino that was erased
+            reDraw(t);
 
             //spawn another tetrimino
             System.out.println("Tetrimino can no longer fall, spawning a new block");
@@ -223,7 +156,6 @@ public class Board {
         int yCoord = t.getyCoord();
         int lowestBlockHeight = 0;
 
-        //check for impossibilities
         //first: find the lowest block in the tetrimino, check if it will go past the bottom of the grid
         Outer: for (int bottomRow = t.getSize()-1; bottomRow > 0; bottomRow--) {
             for (int col = 0; col < t.getShape()[0].length; col++) {
@@ -231,24 +163,13 @@ public class Board {
                     if (bottomRow + yCoord + 1 >= boardArray.length) {
                         return false;
                     } else {
-                        System.out.println("Found block at " + bottomRow + " local, or " + (bottomRow+yCoord) +
-                                " on grid. Did not go past boundary.");
+                        //System.out.println("Found block at " + bottomRow + " local, or " + (bottomRow+yCoord) +
+                        //        " on grid. Did not go past boundary.");
                         break Outer;
                     }
                 }
             }
         }
-
-        /*
-        for (int row = 0, bottomRow = t.getSize()-1; row < t.getShape().length; row++, bottomRow--) {
-            for (int col = 0; col < t.getShape()[0].length; col++) {
-                if (t.getShape()[row][col] != 0 && yCoord + t.getSize()-(bottomRow+1) >= boardArray.length) {
-                    System.out.println("Will return false - edge of grid");
-                    return false;
-                }
-                System.out.println(yCoord + t.getSize()-1);
-            }
-        }*/
 
         //second: check for a block collision
         for (int row = 0; row < t.getShape().length; row++) {
@@ -259,10 +180,66 @@ public class Board {
                 }
             }
         }
-
-        //System.out.println("Will return true...");
         return true;
-    }
+    } //end of tetriminoDropCheck method
+
+    //redraws a block after a rotation or drop
+    public static void erase(Tetrimino t) {
+        int size = t.getSize();
+        int xCoord = t.getxCoord();
+        int yCoord = t.getyCoord();
+
+        //erase the previous block
+        if (size == 2) {
+            //erase the square
+            boardArray[yCoord][xCoord] = 0;
+            boardArray[yCoord][xCoord+1] = 0;
+            boardArray[yCoord+1][xCoord] = 0;
+            boardArray[yCoord+1][xCoord+1] = 0;
+        } else if (size == 3 || size == 4) {
+            //erase the existing tetrimino
+            for (int row = 0; row < t.getShape().length; row++) {
+                for (int col = 0; col < t.getShape()[0].length; col++) {
+                    //if the shape has a value, erase where the corresponding value on the board array would be
+                    if (t.getShape()[row][col] != 0) {
+                        boardArray[yCoord+row][xCoord+col] = 0;
+                    }
+                }
+            }
+        } else {
+            System.out.println("Error: size impossible");
+        }
+    } //end of erase method
+
+    //redraws a block after a rotation or drop
+    public static void reDraw(Tetrimino t) {
+        int yCoord = t.getyCoord();
+        int xCoord = t.getxCoord();
+
+        //draw the tetrimino, depending on its size
+        if (t.getSize() == 2) {
+            //recreate the square
+            boardArray[yCoord][xCoord] = 3;
+            boardArray[yCoord][xCoord+1] = 3;
+            boardArray[yCoord+1][xCoord] = 3;
+            boardArray[yCoord+1][xCoord+1] = 3;
+
+            //if it's a standard block (not the square or line), drop it
+        } else if (t.getSize() == 3 || t.getSize() == 4) {
+            //create the new tetrimino
+            for (int row = 0; row < t.getShape().length; row++) {
+                for (int col = 0; col < t.getShape()[0].length; col++) {
+                    //if the shape has a value, create a block where the corresponding value on the board array would be
+                    if (t.getShape()[row][col] != 0) {
+                        boardArray[yCoord+row][xCoord+col] = t.getShape()[row][col];
+                    }
+                }
+            }
+            //if it's the line, drop it
+        } else {
+            System.out.println("Error: size impossible");
+        }
+    } //end of reDraw method
 
     public int[][] getBoardArray() {
         return boardArray;
