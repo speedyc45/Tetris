@@ -8,7 +8,7 @@ public class Tetrimino {
     private int size;
     private int xCoord; //coordinates for block of the top left point
     private int yCoord; //(according to their layouts, as shown below, even if it isn't a block!)
-    public static final int ROTATE_LEFT = 0;
+    public static final int ROTATE_LEFT = -1;
     public static final int ROTATE_RIGHT = 1;
 
 
@@ -118,9 +118,6 @@ public class Tetrimino {
         int[][] newShape;
         int rotateLeftCounter = 0;
 
-        //first, erase the existing Tetrimino
-        Board.erase(this);
-
         //then rotate its shape array
         if (rotateDir == ROTATE_LEFT) {
             rotateLeftCounter = 1;
@@ -132,7 +129,7 @@ public class Tetrimino {
             if (shape[0].length == 2) {
                 //do nothing, a square can't be rotated
             } else if (shape[0].length == 3) {
-                System.out.println("Rotating a three shape left...");
+                //System.out.println("Rotating a three shape left...");
 
                 //swap the placement of the blocks in the grid
                 newShape = new int[3][3];
@@ -186,9 +183,6 @@ public class Tetrimino {
                 }
             }
         } //end of rotation loop
-
-        //last, redraw the tetrimino
-        Board.reDraw(this);
 
     } //end of rotate method
 

@@ -188,13 +188,14 @@ public class Board {
     //moves the tetrimino in the given direction
     public static void tetriminoMove(Tetrimino t, int direction) {
         //direction 1=left, 2=right
+
+        //erase the tetrimino (so it can't collide with itself) before checking for collisions
+        erase(t);
         switch (direction) {
             //left
             case 1:
                 if (tetriminoMoveCheck(t, 1)) {
-                    erase(t);
                     t.setxCoord(t.getxCoord()-1);
-                    reDraw(t);
                 } else {
                     System.out.println("Invalid move");
                 }
@@ -202,18 +203,127 @@ public class Board {
             //right
             case 2:
                 if (tetriminoMoveCheck(t, 2)) {
-                    erase(t);
                     t.setxCoord(t.getxCoord()+1);
-                    reDraw(t);
                 } else {
                     System.out.println("Invalid move");
                 }
                 break;
         }
+
+        //redraw the tetrimino after moving it (or not moving, if it isn't valid)
+        reDraw(t);
     }
 
+    //checks if the move of a tetrimino is valid
     private static boolean tetriminoMoveCheck(Tetrimino t, int direction) {
-        //TODO
+        //directions: 1=left,2=right
+        int xCoord = t.getxCoord();
+        int yCoord = t.getyCoord();
+        int rowOffset = 0;
+        int colOffset = 0;
+
+        switch (direction) {
+            case 1: //left
+                //find the leftmost block in the tetrimino, check if it will go past the left edge of the grid
+                Outer: for (int col = 0; col < t.getShape()[0].length; col++) {
+                    for (int row = 0; row < t.getShape().length; row++) {
+                        if (t.getShape()[row][col] != 0) {
+                            if (col + xCoord <= 0) {
+                                return false;
+                            } else {
+                                break Outer;
+                            }
+                        }
+                    }
+                }
+
+                //otherwise, check for a block collision
+                for (int row = 0; row < t.getShape().length; row++) {
+                    for (int col = 0; col < t.getShape()[0].length; col++) {
+                        if (t.getShape()[row][col] != 0 && boardArray[yCoord+row][xCoord+col-1] != 0) {
+                            System.out.println("Will return false - block collision left");
+                            return false;
+                        }
+                    }
+                }
+                break;
+            case 2: //right
+                //find the rightmost block in the tetrimino, check if it will go past the right edge of the grid
+                Outer: for (int col = t.getSize()-1; col > 0; col--) {
+                    for (int row = 0; row < t.getShape().length; row++) {
+                        if (t.getShape()[row][col] != 0) {
+                            if (col + xCoord + 1 >= boardArray[0].length) {
+                                return false;
+                            } else {
+                                break Outer;
+                            }
+                        }
+                    }
+                }
+
+                //otherwise, check for a block collision
+                for (int row = 0; row < t.getShape().length; row++) {
+                    for (int col = 0; col < t.getShape()[0].length; col++) {
+                        if (t.getShape()[row][col] != 0 && boardArray[yCoord+row][xCoord+col+1] != 0) {
+                            System.out.println("Will return false - block collision right");
+                            return false;
+                        }
+                    }
+                }
+                break;
+        } //end of direction switch statement
+
+        return true;
+    }
+
+    //moves the tetrimino in the given direction
+    public static void tetriminoRotate(Tetrimino t, int rotation) {
+        //rotation -1=left, 1=right
+
+        //erase the tetrimino (so it can't collide with itself) before checking for collisions, rotating if possible,
+        //then redrawing the tetrimino
+        erase(t);
+
+        if (tetriminoRotateCheck(t, rotation)) {
+            t.rotate(rotation);
+        }
+
+        reDraw(t);
+    }
+
+    //moves the tetrimino in the given direction
+    private static boolean tetriminoRotateCheck(Tetrimino t, int rotation) {
+        //rotation -1=left, 1=right
+
+        t.rotate(rotation);
+
+        //check if the leftmost or rightmost block in the tetrimino will go past the edge of the grid
+        Outer: for (int col = 0; col < t.getShape()[0].length; col++) {
+            for (int row = 0; row < t.getShape().length; row++) {
+                if (t.getShape()[row][col] != 0) {
+                    if (col + t.getxCoord() <= 0) {
+                        t.rotate(-rotation);
+                        return false;
+                    } else if (col + t.getxCoord() + 1 >= boardArray[0].length) {
+                        t.rotate(-rotation);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        //check for a block collision
+        for (int row = 0; row < t.getShape().length; row++) {
+            for (int col = 0; col < t.getShape()[0].length; col++) {
+                if (t.getShape()[row][col] != 0 && boardArray[t.getyCoord()+row][t.getxCoord()+col] != 0) {
+                    System.out.println("Will return false - block collision on rotation");
+                    t.rotate(-rotation);
+                    return false;
+                }
+            }
+        }
+
+        t.rotate(-rotation);
         return true;
     }
 
@@ -236,7 +346,21 @@ public class Board {
                 for (int col = 0; col < t.getShape()[0].length; col++) {
                     //if the shape has a value, erase where the corresponding value on the board array would be
                     if (t.getShape()[row][col] != 0) {
-                        boardArray[yCoord+row][xCoord+col] = 0;
+                        try {
+                            boardArray[yCoord+row][xCoord+col] = 0;
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("yCoord: " + yCoord + " xCoord: " + xCoord + "\nrow: " + row + " col: " + col);
+
+                            for (int row2 = 0; row2 < t.getSize(); row2++) {
+                                for (int col2 = 0; col2 < t.getSize(); col2++) {
+                                    System.out.print(t.getShape()[row2][col2]);
+                                }
+                                System.out.println();
+                            }
+
+                            System.exit(0);
+                        }
+
                     }
                 }
             }

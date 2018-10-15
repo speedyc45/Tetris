@@ -66,7 +66,7 @@ class GameWindow extends JFrame{
 
     //
     public static void newTetrimino() {
-        current = new Tetrimino((int)Math.floor(Math.random() * 7));
+        current = new Tetrimino((int)Math.floor(Math.random() * 14)/2);
 
         if (!gameStart) {
             t2 = new Timer(DROP_SPEED, new ActionListener(){
@@ -82,8 +82,8 @@ class GameWindow extends JFrame{
     }
 
     //
-    public static void rotateTetrimino(int dir) {
-        current.rotate(dir);
+    public static void rotateTetrimino(int rot) {
+        Board.tetriminoRotate(current, rot);
     }
 
     public static void moveTetrimino(int dir) {
@@ -242,4 +242,4 @@ class KeyListener implements java.awt.event.KeyListener {
             releaseKeyDown = false;
         }
     }
-}
+} //end of KeyListener class
