@@ -9,6 +9,8 @@ public class Board {
     public static final int COLUMNS = 10;
     public static final int ROWS = 20;
     private static int[][] boardArray;
+    public static final int MOVE_LEFT = 1;
+    public static final int MOVE_RIGHT = 2;
     public static final ImageIcon blockYellow = new ImageIcon("assets\\Tetris_Block_Yellow.png");
     public static final ImageIcon blockPurple = new ImageIcon("assets\\Tetris_Block_Purple.png");
     public static final ImageIcon blockPink = new ImageIcon("assets\\Tetris_Block_Pink.png");
@@ -182,6 +184,38 @@ public class Board {
         }
         return true;
     } //end of tetriminoDropCheck method
+
+    //moves the tetrimino in the given direction
+    public static void tetriminoMove(Tetrimino t, int direction) {
+        //direction 1=left, 2=right
+        switch (direction) {
+            //left
+            case 1:
+                if (tetriminoMoveCheck(t, 1)) {
+                    erase(t);
+                    t.setxCoord(t.getxCoord()-1);
+                    reDraw(t);
+                } else {
+                    System.out.println("Invalid move");
+                }
+                break;
+            //right
+            case 2:
+                if (tetriminoMoveCheck(t, 2)) {
+                    erase(t);
+                    t.setxCoord(t.getxCoord()+1);
+                    reDraw(t);
+                } else {
+                    System.out.println("Invalid move");
+                }
+                break;
+        }
+    }
+
+    private static boolean tetriminoMoveCheck(Tetrimino t, int direction) {
+        //TODO
+        return true;
+    }
 
     //redraws a block after a rotation or drop
     public static void erase(Tetrimino t) {

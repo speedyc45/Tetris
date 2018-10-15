@@ -86,6 +86,10 @@ class GameWindow extends JFrame{
         current.rotate(dir);
     }
 
+    public static void moveTetrimino(int dir) {
+        Board.tetriminoMove(current, dir);
+    }
+
     public static int getHEIGHT() {
         return height;
     } //end of getHEIGHT method
@@ -207,17 +211,17 @@ class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void keyPressed(KeyEvent e ) {
-        if (e.getKeyCode() == 40 && !releaseKeyLeft) { //check for the left arrow key, and if it's being pressed again
+        if (e.getKeyCode() == 37 && !releaseKeyLeft) { //check for the left arrow key, and if it's being pressed again
             System.out.println("Moving the tetrimino left...");
-            //TODO
-            releaseKeyDown = true;
+            GameWindow.moveTetrimino(Board.MOVE_LEFT);
+            releaseKeyLeft = true;
         } else if (e.getKeyCode() == 38 && !releaseKeyUp) { //check for the up arrow key, and if it's being pressed again
             System.out.println("Rotating the tetrimino left...");
             GameWindow.rotateTetrimino(Tetrimino.ROTATE_LEFT);
             releaseKeyUp = true;
         } else if (e.getKeyCode() == 39 && !releaseKeyRight) { //check for the right arrow key, and if it's being pressed again
             System.out.println("Moving the tetrimino right...");
-            //TODO
+            GameWindow.moveTetrimino(Board.MOVE_RIGHT);
             releaseKeyRight = true;
         } else if (e.getKeyCode() == 40 && !releaseKeyDown) { //check for the down arrow key, and if it's being pressed again
             System.out.println("Rotating the tetrimino right...");
@@ -228,9 +232,13 @@ class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == 38) { //check for the left arrow key
+        if (e.getKeyCode() == 37) { //check for the left arrow key
+            releaseKeyLeft = false;
+        } else if (e.getKeyCode() == 38) { //check for the up arrow key
             releaseKeyUp = false;
-        } else if (e.getKeyCode() == 40) { //check for the left arrow key
+        } else if (e.getKeyCode() == 39) { //check for the right arrow key
+            releaseKeyRight = false;
+        } else if (e.getKeyCode() == 40) { //check for the down arrow key
             releaseKeyDown = false;
         }
     }
