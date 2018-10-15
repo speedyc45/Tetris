@@ -108,8 +108,8 @@ public class Board {
             } else if(t.getSize() == 4) { //if the tetrimino is a line piece, spawn on the top row
 
                 //add the tetrimino to the board array
-                for (int y = 0; y < t.getSize(); y++) {
-                    boardArray[0][y+3] = t.getShape()[1][y];
+                for (int col = 0; col < t.getSize(); col++) {
+                    boardArray[1][col+3] = t.getShape()[1][col];
                 }
             }
 
@@ -398,6 +398,68 @@ public class Board {
             System.out.println("Error: size impossible");
         }
     } //end of reDraw method
+
+    public static void clearLine() {
+        boolean runLoop;
+        int clearLineRow;
+
+        //check if there is a line to be cleared, and allow the loop to run if so
+        clearLineRow = clearLineCheck(0);
+        if (clearLineRow >= 0 && clearLineRow <= 19) {
+            runLoop = true;
+        } else {
+            runLoop = false;
+        }
+
+        //continue clearing lines while it's possible
+        while (runLoop) {
+            //delete the row that should be cleared
+            for (int col = 0; col < boardArray[0].length; col++) {
+                boardArray[clearLineRow][col] = 0;
+            }
+
+            //cycle through the array and move all of the above blocks down one row
+            for (int row = clearLineRow; row > 0; row--) {
+                for (int col = 0; col < boardArray[0].length; col++) {
+                    boardArray[row][col] = boardArray[row-1][col];
+                }
+            }
+
+
+            //check if there are any other lines to clear, and continue the loop if there are
+            clearLineRow = clearLineCheck(clearLineRow);
+
+            if (clearLineRow >= 0 && clearLineRow <= 19) {
+                runLoop = true;
+            } else {
+                runLoop = false;
+            }
+        }
+    }
+
+    private static int clearLineCheck(int startRow) {
+        int rowCounter = 0;
+
+        //cycle through the board and checks for full lines to be cleared
+        for (int row = startRow; row < boardArray.length; row++) {
+            for (int col = 0; col < boardArray[0].length; col++) {
+                //add the the counter if there is a block in the row
+                if (boardArray[row][col] != 0) {
+                    rowCounter++;
+                }
+
+                //if the entire row is blocks, return the row number
+                if (rowCounter == boardArray[0].length) {
+                    return row;
+                }
+            }
+            //restart the rowCounter as the loop reaches a new row
+            rowCounter = 0;
+        }
+
+        //if no row was return, return an illegal row
+        return 20;
+    }
 
     public int[][] getBoardArray() {
         return boardArray;

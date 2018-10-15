@@ -66,7 +66,9 @@ class GameWindow extends JFrame{
 
     //
     public static void newTetrimino() {
-        current = new Tetrimino((int)Math.floor(Math.random() * 14)/2);
+        //clear any lines if possible, then create another tetrimino
+        Board.clearLine();
+        current = new Tetrimino((int)Math.floor(Math.random() * 7 + 1));
 
         if (!gameStart) {
             t2 = new Timer(DROP_SPEED, new ActionListener(){
