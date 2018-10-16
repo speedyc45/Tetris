@@ -116,7 +116,7 @@ public class Board {
     } //end of addTetrimino method
 
     //updates the board (moves blocks if necessary)
-    public static void tetriminoDrop(Tetrimino t) {
+    public static void tetriminoDrop(Tetrimino t, boolean override) {
         int size = t.getSize();
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
@@ -124,7 +124,7 @@ public class Board {
         //erase the previous block
         erase(t);
 
-        if (tetriminoDropCheck(t)) {
+        if (override || tetriminoDropCheck(t)) {
             //System.out.println("Valid drop. Dropping tetrimino now...");
             //System.out.println("Old - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size);
 
@@ -285,7 +285,7 @@ public class Board {
         }
 
         reDraw(t);
-    }
+    } //end of tetriminoRotate method
 
     //moves the tetrimino in the given direction
     private static boolean tetriminoRotateCheck(Tetrimino t, int rotation) {
@@ -321,7 +321,18 @@ public class Board {
 
         t.rotate(-rotation);
         return true;
-    }
+    } //end of tetriminoRotateCheck method
+
+    //instantly drops a tetrimino to the bottom of a grid
+    public static void tetriminoInstantDrop(Tetrimino t) {
+
+        //while the drop is valid, continue to drop the block
+        erase(t);
+        while (tetriminoDropCheck(t)) {
+            tetriminoDrop(t, true);
+        }
+        reDraw(t);
+    } //end of tetriminoInstantDrop method
 
     //redraws a block after a rotation or drop
     public static void erase(Tetrimino t) {

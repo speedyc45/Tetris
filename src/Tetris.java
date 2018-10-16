@@ -75,7 +75,7 @@ class GameWindow extends JFrame{
                 @Override
                 public void actionPerformed (ActionEvent evt)
                 {
-                    Board.tetriminoDrop(current);
+                    Board.tetriminoDrop(current, false);
                 }
             });
             t2.start();
@@ -88,13 +88,11 @@ class GameWindow extends JFrame{
         Board.tetriminoRotate(current, rot);
     }
 
-    public static void moveTetrimino(int dir) {
-        Board.tetriminoMove(current, dir);
-    }
+    public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
-    public static int getHEIGHT() {
-        return height;
-    } //end of getHEIGHT method
+    public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); }
+
+    public static int getHEIGHT() { return height; } //end of getHEIGHT method
 
     public static int getWIDTH() {
         return width;
@@ -203,6 +201,7 @@ class PaintSurface extends JComponent {
 
 //handles key input
 class KeyListener implements java.awt.event.KeyListener {
+    private static boolean releaseKeySpace = false;
     private static boolean releaseKeyLeft = false;
     private static boolean releaseKeyRight = false;
     private static boolean releaseKeyUp = false;
@@ -213,6 +212,11 @@ class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void keyPressed(KeyEvent e ) {
+        if (e.getKeyCode() == 32 && !releaseKeySpace) { //check for the space bar, and if it's being pressed again
+            System.out.println("Instant dropping tetrimino...");
+            GameWindow.instantDropTetrimino();
+            releaseKeySpace = true;
+        } else
         if (e.getKeyCode() == 37 && !releaseKeyLeft) { //check for the left arrow key, and if it's being pressed again
             System.out.println("Moving the tetrimino left...");
             GameWindow.moveTetrimino(Board.MOVE_LEFT);
@@ -234,7 +238,9 @@ class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == 37) { //check for the left arrow key
+        if (e.getKeyCode() == 32) { //check for the left arrow key
+            releaseKeySpace = false;
+        } else if (e.getKeyCode() == 37) { //check for the left arrow key
             releaseKeyLeft = false;
         } else if (e.getKeyCode() == 38) { //check for the up arrow key
             releaseKeyUp = false;
