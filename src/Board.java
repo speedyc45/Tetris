@@ -44,7 +44,7 @@ public class Board {
             }
         }
 
-        //check if the tetrimino can spawn /TODO - add specific shape checking!/
+        //check if the tetrimino can spawn
         if (t.getSize() == 2) {
             //note: using OUTER: labels the outside loop, making it possible to break all loops
             OUTER: for (int x = 0; x < 2; x++) {
@@ -57,32 +57,23 @@ public class Board {
                 } //end of y loop
             } //end of OUTER loop
 
-        } else if (t.getSize() == 3) {
-            OUTER: for (int x = 0; x < 2; x++) {
-                for (int y = 0; y < t.getSize(); y++) {
-                    if (validSpawnLocations[x][y] != 0) {
-                        validSpawn = false;
-                        break OUTER;
+        } else if (t.getSize() == 3 || t.getSize() == 4) {
+            //second: check for a block collision
+            for (int row = 0; row < t.getShape().length; row++) {
+                for (int col = 0; col < t.getShape()[0].length; col++) {
+                    if (t.getShape()[row][col] != 0 && boardArray[t.getyCoord()+row][t.getxCoord()+col] != 0) {
+                        System.out.println("Block cannot spawn");
+                        return false;
                     }
-                } //end of y loop
-            } //end of OUTER loop
-
-        } else if (t.getSize() == 4) {
-            OUTER: for (int x = 0; x < 2; x++) {
-                for (int y = 0; y < t.getSize(); y++) {
-                    if (validSpawnLocations[x][y] != 0) {
-                        validSpawn = false;
-                        break OUTER;
-                    }
-                } //end of y loop
-            } //end of OUTER loop
+                }
+            }
         }
 
         //System.out.println("addTetriminoCheck returning: " + validSpawn);
         return validSpawn;
     } //end of addTetriminoCheck method
 
-    //adds a tetrimino block to the board /TODO shape specific addition
+    //adds a tetrimino block to the board
     public static void addTetrimino(Tetrimino t) {
         //if the tetrimino can be added
         if (addTetriminoCheck(t)) {
@@ -97,12 +88,15 @@ public class Board {
                         boardArray[x][y+4] = t.getShape()[x][y];
                     }
                 }
-            } else if(t.getSize() == 3) { //if the tetrimino is a standard 3 size, spawn in the default location
+            } else if (t.getSize() == 3) { //if the tetrimino is a standard 3 size, spawn in the default location
 
                 //add the tetrimino to the board array
-                for (int x = 0; x < 2; x++) {
-                    for (int y = 0; y < t.getSize(); y++) {
-                        boardArray[x][y+3] = t.getShape()[x][y];
+                for (int row = 0; row < 2; row++) {
+                    for (int col = 0; col < t.getSize(); col++) {
+                        if (t.getShape()[row][col] != 0) {
+                            boardArray[row][col+3] = t.getShape()[row][col];
+                        }
+
                     }
                 }
             } else if(t.getSize() == 4) { //if the tetrimino is a line piece, spawn on the top row
@@ -114,7 +108,9 @@ public class Board {
             }
 
         } else {
-            System.out.println("Add tetrimino: false");
+            //end the game (game over!)
+            System.out.println("Cannot add a new tetrimino.\nGame Over");
+            System.exit(0);
         }
 
     } //end of addTetrimino method
