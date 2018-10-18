@@ -297,10 +297,10 @@ public class Board {
         Outer: for (int col = 0; col < t.getShape()[0].length; col++) {
             for (int row = 0; row < t.getShape().length; row++) {
                 if (t.getShape()[row][col] != 0) {
-                    if (col + t.getxCoord() <= 0) {
+                    if (col + t.getxCoord() < 0) {
                         t.rotate(-rotation);
                         return false;
-                    } else if (col + t.getxCoord() + 1 >= boardArray[0].length) {
+                    } else if (col + t.getxCoord() + 1 > boardArray[0].length) {
                         t.rotate(-rotation);
                         return false;
                     }
@@ -316,8 +316,23 @@ public class Board {
                     t.rotate(-rotation);
                     return false;
                 }
+                System.out.print(t.getShape()[row][col]);
             }
+            System.out.println();
         }
+
+        //Testing!!!
+        for (int row = 0; row < t.getShape().length; row++) {
+            for (int col = 0; col < t.getShape()[0].length; col++) {
+                if (t.getShape()[row][col] != 0 && boardArray[t.getyCoord()+row][t.getxCoord()+col] != 0) {
+                    System.out.println("Will return false - block collision on rotation");
+                    t.rotate(-rotation);
+                    return false;
+                }
+                System.out.print(t.getShape()[row][col]);
+            }
+            System.out.println();
+        }//TESTING
 
         t.rotate(-rotation);
         return true;
