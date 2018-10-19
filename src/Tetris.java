@@ -28,7 +28,7 @@ class GameWindow extends JFrame{
     private static int width = 350;
     private static int height = 465;
     private final int ANIMATION_REFRESH_RATE = 100;
-    private static final int DROP_SPEED = 400;
+    private static int dropSpeed = 1000;
     private static boolean gameStart = false;
     private PaintSurface canvas;
     private static Tetrimino current;
@@ -71,7 +71,7 @@ class GameWindow extends JFrame{
         current = new Tetrimino((int)Math.floor(Math.random() * 7 + 1));
 
         if (!gameStart) {
-            t2 = new Timer(DROP_SPEED, new ActionListener(){
+            t2 = new Timer(dropSpeed, new ActionListener(){
                 @Override
                 public void actionPerformed (ActionEvent evt)
                 {
@@ -81,6 +81,18 @@ class GameWindow extends JFrame{
             t2.start();
             gameStart = true;
         }
+    }
+
+    //
+    public static void levelUp() {
+        if (Board.getLevel() < 8) {
+            Board.setLevel(Board.getLevel() + 1);
+            dropSpeed -= 100;
+            System.out.println("Level up - level " + Board.getLevel());
+        } else {
+            System.out.println("Max level reached.");
+        }
+
     }
 
     //

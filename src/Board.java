@@ -10,6 +10,7 @@ public class Board {
     private static int rowsCleared = 0;
     private static int level = 1;
     private static int score = 0;
+    private static int blocksSpawned = 0;
     public static final int COLUMNS = 10;
     public static final int ROWS = 20;
     public static final int MOVE_LEFT = 1;
@@ -463,6 +464,11 @@ public class Board {
                 runLoop = false;
             }
         }
+
+        //check if a level up is neccesary, and then level up (if needed)
+        if (Math.floor(rowsCleared/(Board.getLevel()*15)) == 1) {
+            GameWindow.levelUp();
+        }
     }
 
     private static int clearLineCheck(int startRow) {
@@ -497,5 +503,12 @@ public class Board {
 
     public static int getLevel() { return level; } //end of getLevel() method
 
+    public static void setLevel(int num) { level = num; } //end of getLevel() method
+
     public static int getScore() { return score; } //end of getLevel() method
+
+    public static int getBlocksSpawned() { return blocksSpawned; } //end of getBlocksSpawned() method
+
+    public static void setBlocksSpawned(int num) { blocksSpawned = num; } //end of setBlocksSpawned() method
+
 } //end of Board class

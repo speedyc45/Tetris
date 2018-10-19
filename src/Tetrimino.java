@@ -106,9 +106,11 @@ public class Tetrimino {
         } //end of shape deciding switch statement
 
         //test print statement
-        System.out.println("New Block - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size + "Shape:" + shapeNum);
+        System.out.println("New Block - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size + " Shape:" + shapeNum);
 
+        //add the tetrimino to the board, and add one to the counter
         Board.addTetrimino(this);
+        Board.setBlocksSpawned(Board.getBlocksSpawned() + 1);
 
     } //end of Tetrimino(int shapeNum) constructor
 
