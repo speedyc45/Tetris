@@ -122,24 +122,14 @@ class PaintSurface extends JComponent {
     private int blockPosY = backgroundOffsetY + 5;
     private Board tetrisBoard = new Board();
 
-    //testing variables -NOT ACTUAL-
-    /*
-    int x_pos = 0;
-    int y_pos = 0;
-    int x_pos2 = 20;
-    int y_pos2 = 30;
-    int x_speed = 2;
-    int y_speed = 3;
-    int x_speed2 = 2;
-    int y_speed2 = 3;
-    int d = 20;
-    */
-
     //method for repainting the canvas
     public void paint(Graphics g) {
         //create the background Image then draw it
         background = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
         g.drawImage(background, backgroundOffsetX, backgroundOffsetY, null);
+        g.drawString("SCORE: " + Board.getScore(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 35);
+        g.drawString("LEVEL: " + Board.getLevel(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 15);
+        g.drawString("LINES CLEARED: " + Board.getRowsCleared(), blockPosX*2 + 20*Board.COLUMNS, 20*Board.ROWS + 5);
 
         //draw the board (check for any values in the board, and draw the correct block for it - in the correct position)
         for (int x = 0; x < Board.ROWS; x++) {

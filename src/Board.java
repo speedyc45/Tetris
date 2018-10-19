@@ -6,9 +6,12 @@ import java.awt.*;
 //class that manages the tetris game board
 public class Board {
     //initialize the necessary variables
+    private static int[][] boardArray;
+    private static int rowsCleared = 0;
+    private static int level = 1;
+    private static int score = 0;
     public static final int COLUMNS = 10;
     public static final int ROWS = 20;
-    private static int[][] boardArray;
     public static final int MOVE_LEFT = 1;
     public static final int MOVE_RIGHT = 2;
     public static final ImageIcon blockYellow = new ImageIcon("assets\\Tetris_Block_Yellow.png");
@@ -345,6 +348,7 @@ public class Board {
         erase(t);
         while (tetriminoDropCheck(t)) {
             tetriminoDrop(t, true);
+            erase(t);
         }
         reDraw(t);
     } //end of tetriminoInstantDrop method
@@ -435,6 +439,8 @@ public class Board {
 
         //continue clearing lines while it's possible
         while (runLoop) {
+            rowsCleared++;
+
             //delete the row that should be cleared
             for (int col = 0; col < boardArray[0].length; col++) {
                 boardArray[clearLineRow][col] = 0;
@@ -486,4 +492,10 @@ public class Board {
     public int[][] getBoardArray() {
         return boardArray;
     } //end of getBoardArray() method
+
+    public static int getRowsCleared() { return rowsCleared; } //end of getRowsCleared() method
+
+    public static int getLevel() { return level; } //end of getLevel() method
+
+    public static int getScore() { return score; } //end of getLevel() method
 } //end of Board class
