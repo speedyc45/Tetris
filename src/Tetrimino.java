@@ -17,6 +17,19 @@ public class Tetrimino {
         this(1);
     } //end of Tetrimino default constructor
 
+    public Tetrimino(Tetrimino t) {
+        shapeNum = t.getShapeNum();
+
+        for (int x = 0; x < shapeNum; x++) {
+            for (int y = 0; y < shapeNum; y++) {
+                shape[x][y] = t.getShape()[x][y];
+            }
+        }
+
+        xCoord = t.getxCoord();
+        yCoord = t.getyCoord();
+    }
+
     //create a Tetrimino given a number to decide the shape
     public Tetrimino(int shapeNum) {
         this.shapeNum = shapeNum;
@@ -107,10 +120,6 @@ public class Tetrimino {
 
         //test print statement
         System.out.println("New Block - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size + " Shape:" + shapeNum);
-
-        //add the tetrimino to the board, and add one to the counter
-        Board.addTetrimino(this);
-        Board.setBlocksSpawned(Board.getBlocksSpawned() + 1);
 
     } //end of Tetrimino(int shapeNum) constructor
 
