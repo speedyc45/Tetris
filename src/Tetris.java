@@ -30,6 +30,7 @@ class GameWindow extends JFrame{
     private final int ANIMATION_REFRESH_RATE = 100;
     private static int dropSpeed = 1000;
     private static boolean gameStart = false;
+    private static boolean gamePaused = false;
     private PaintSurface canvas;
     private static Tetrimino current;
     private static Tetrimino[] nextTetrimino = new Tetrimino[4];
@@ -117,15 +118,43 @@ class GameWindow extends JFrame{
     }
 
     //
-    public static void rotateTetrimino(int rot) {
-        Board.tetriminoRotate(current, rot);
-    }
+    public static void rotateTetrimino(int rot) { Board.tetriminoRotate(current, rot); }
 
+    //
     public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
-    public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); }
+    //
+    public static void setSoftDropTetrimino(boolean drop) {
+        if (drop) {
+            t2.setDelay(100);
+            resetDropTimer();
+        } else {
+            t2.setDelay(dropSpeed);
+        }
+    }
 
-    public static Tetrimino[] getNextTetrimino() { return nextTetrimino; } //end of getWIDTH method
+    //
+    public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); resetDropTimer(); }
+
+    //
+    private static void resetDropTimer() { t2.stop(); Board.tetriminoDrop(current, false); t2.start(); }
+
+    //
+    public static void pauseGame(boolean pause) {
+        if (pause) {
+            gamePaused = true;
+            t2.stop();
+        } else {
+            gamePaused = false;
+            t2.start();
+        }
+    }
+
+    //
+    public static Tetrimino[] getNextTetrimino() { return nextTetrimino; }
+
+    //
+    public static boolean getGamePaused() { return gamePaused; }
 
     //
     public String toString() {
@@ -165,6 +194,10 @@ class PaintSurface extends JComponent {
         g.drawString("SCORE: " + Board.getScore(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 35);
         g.drawString("LEVEL: " + Board.getLevel(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 15);
         g.drawString("LINES CLEARED: " + Board.getRowsCleared(), blockPosX*2 + 20*Board.COLUMNS, 20*Board.ROWS + 5);
+
+        if (GameWindow.getGamePaused()) {
+            g.drawString("GAME PAUSED", blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 65);
+        }
 
         //draw the board (check for any values in the board, and draw the correct block for it - in the correct position)
         for (int x = 0; x < Board.ROWS; x++) {
@@ -264,6 +297,7 @@ class PaintSurface extends JComponent {
 
 //handles key input
 class KeyListener implements java.awt.event.KeyListener {
+    private static boolean releaseKeyShift = false;
     private static boolean releaseKeySpace = false;
     private static boolean releaseKeyLeft = false;
     private static boolean releaseKeyRight = false;
@@ -296,6 +330,15 @@ class KeyListener implements java.awt.event.KeyListener {
             System.out.println("Rotating the tetrimino right...");
             GameWindow.rotateTetrimino(Tetrimino.ROTATE_RIGHT);
             releaseKeyDown = true;
+        } else if (e.getKeyCode() == 16 && !releaseKeyShift) { //check for the shift key, and if it's being pressed again
+            GameWindow.setSoftDropTetrimino(true);
+            releaseKeyShift = true;
+        } else if (e.getKeyCode() == 27) { //check for the escape key, then quit if pressed
+            if (GameWindow.getGamePaused()) {
+                GameWindow.pauseGame(false);
+            } else {
+                GameWindow.pauseGame(true);
+            }
         }
         System.out.println("Key Pressed: " + e.getKeyCode());
     }
@@ -311,6 +354,10 @@ class KeyListener implements java.awt.event.KeyListener {
             releaseKeyRight = false;
         } else if (e.getKeyCode() == 40) { //check for the down arrow key
             releaseKeyDown = false;
+        } else if (e.getKeyCode() == 16) { //check for the shift key
+            GameWindow.setSoftDropTetrimino(false);
+            releaseKeyShift = false;
         }
+        System.out.println("Key Released: " + e.getKeyCode());
     }
 } //end of KeyListener class
