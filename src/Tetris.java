@@ -304,9 +304,7 @@ class KeyListener implements java.awt.event.KeyListener {
     private static boolean releaseKeyUp = false;
     private static boolean releaseKeyDown = false;
 
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) { }
 
     public void keyPressed(KeyEvent e ) {
         if (e.getKeyCode() == 32 && !releaseKeySpace) { //check for the space bar, and if it's being pressed again
