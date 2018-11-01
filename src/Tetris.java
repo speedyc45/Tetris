@@ -8,25 +8,121 @@
  */
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class Tetris {
+    //
+    public static StartWindow startMenu = null;
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-
-        new GameWindow();
+        startMenu = new StartWindow();
     } //end of main method
 
 } //end of main Tetris class
 
+//
+class StartWindow extends JFrame{
+    //for the main menu window
+    private JPanel mainMenuPanel;
+    private JPanel mainMenuNorthPanel;
+    private JPanel mainMenuCenterPanel;
+    private JPanel mainMenuSouthPanel;
+    private JButton startGameButton;
+    private JButton aboutGameButton;
+    private JButton instructionsGameButton;
+    private JLabel mainTitle;
+    private JLabel gameLogo;
+    private int[] mainMenuButtonSizes = new int[2];
+    //private int[] backgroundColor = new int[3];
+
+    //
+    public StartWindow() {
+        //set the size, location, close operation, and title of the window //TODO
+        mainMenuPanel = new JPanel();
+        mainMenuNorthPanel = new JPanel();
+        mainMenuCenterPanel = new JPanel();
+        mainMenuSouthPanel = new JPanel();
+        mainTitle = new JLabel("Welcome to TETRIS!");
+        gameLogo = new JLabel(new ImageIcon("assets\\Tetris_Logo.png"));
+        startGameButton = new JButton("Start Game");
+        aboutGameButton = new JButton("About Game");
+        instructionsGameButton = new JButton("Game Instructions");
+        mainMenuButtonSizes[0] = 140;
+        mainMenuButtonSizes[1] = 26;
+        /*backgroundColor[0] = 145;
+        backgroundColor[1] = 187;
+        backgroundColor[2] = 255;*/
+
+        //set the main menu's default closing operation, size,
+        //location, and add the mainMenuPanel
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.setSize(GameWindow.width, GameWindow.height);
+        this.setLocationRelativeTo(null);
+        this.addWindowListener(new WindowListener());
+        this.setContentPane(mainMenuPanel);
+
+        //set borderlayout for the main panel, and add the main panels
+        mainMenuPanel.setLayout(new BorderLayout());
+        mainMenuPanel.add(mainMenuNorthPanel, BorderLayout.NORTH);
+        mainMenuPanel.add(mainMenuCenterPanel, BorderLayout.CENTER);
+        mainMenuPanel.add(mainMenuSouthPanel, BorderLayout.SOUTH);
+
+        /*//set the colours of the main three panels
+        mainMenuNorthPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
+        mainMenuCenterPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
+        mainMenuSouthPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
+        */
+
+        //add the buttons and text to their respective panels
+        mainMenuNorthPanel.add(mainTitle);
+        mainMenuCenterPanel.add(gameLogo);
+        mainMenuSouthPanel.add(startGameButton);
+        mainMenuSouthPanel.add(aboutGameButton);
+        mainMenuSouthPanel.add(instructionsGameButton);
+
+        //add listeners to all of the buttons, and set their sizes
+        startGameButton.addActionListener(new ButtonListener());
+        aboutGameButton.addActionListener(new ButtonListener());
+        instructionsGameButton.addActionListener(new ButtonListener());
+        startGameButton.setPreferredSize(new Dimension(mainMenuButtonSizes[0],mainMenuButtonSizes[1]));
+        aboutGameButton.setPreferredSize(new Dimension(mainMenuButtonSizes[0],mainMenuButtonSizes[1]));
+        instructionsGameButton.setPreferredSize(new Dimension(mainMenuButtonSizes[0],mainMenuButtonSizes[1]));
+
+        this.setVisible(true);
+    } //end of StartWindow constructor
+
+    //
+    public void StartGame() {
+        this.setVisible(false);
+        new GameWindow();
+    }
+
+    //
+    public static void CloseApplication(boolean forceClose) {
+        //if the application is being forceClosed, close it
+        if (forceClose) {
+            System.out.println("Closing application...");
+            System.exit(0);
+        }
+
+        //otherwise ask the user if they want to close the application
+        System.out.println("Close application process called...");
+        int closeApp = JOptionPane.showConfirmDialog(null, "Are you sure you want to close the application?",
+                "Close Application", JOptionPane.YES_NO_OPTION);
+
+        if (closeApp == 0) {
+            System.out.println("Closing application...");
+            System.exit(0);
+        }
+    }
+}
+
+//
 class GameWindow extends JFrame{
     //initialize the necessary variables
-    private static int width = 350;
-    private static int height = 465;
+    public static int width = 350;
+    public static int height = 465;
     private final int ANIMATION_REFRESH_RATE = 100;
     private static int dropSpeed = 1000;
     private static boolean gameStart = false;
@@ -359,3 +455,51 @@ class KeyListener implements java.awt.event.KeyListener {
         System.out.println("Key Released: " + e.getKeyCode());
     }
 } //end of KeyListener class
+
+//a listener for when the user interacts with the frame (window)
+class WindowListener implements java.awt.event.WindowListener {
+
+    @Override
+    public void windowActivated(WindowEvent e) { }
+
+    @Override
+    public void windowClosed(WindowEvent e) { }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        StartWindow.CloseApplication(false);
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) { }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) { }
+
+    @Override
+    public void windowIconified(WindowEvent e) { }
+
+    @Override
+    public void windowOpened(WindowEvent e) { }
+}
+
+//a listener for when the user interacts with one of the buttons in the GUI
+class ButtonListener implements java.awt.event.ActionListener {
+
+    //interaction with the buttons "Start", "Help", and "Exit"
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        //check which button has been clicked of the main menu buttons
+        if (e.getActionCommand().equals("Start Game")) {
+            System.out.println("Start button clicked...");
+            Tetris.startMenu.StartGame();
+        } else if (e.getActionCommand().equals("About Game")) {
+            System.out.println("About button clicked...");
+            //TODO
+        } else if (e.getActionCommand().equals("Game Instructions")) {
+            System.out.println("Instructions button clicked...");
+            //TODO
+        }
+    }
+}
