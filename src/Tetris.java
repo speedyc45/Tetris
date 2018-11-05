@@ -74,17 +74,24 @@ class StartWindow extends JFrame{
         mainMenuSouthPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
         */
 
-        //add the buttons and text to their respective panels
+        //add the buttons and text to their respective panels, separating the buttons by 20 pixels each
         mainMenuNorthPanel.add(mainTitle);
         mainMenuCenterPanel.add(gameLogo);
+        mainMenuSouthPanel.setLayout(new BoxLayout(mainMenuSouthPanel, BoxLayout.PAGE_AXIS));
         mainMenuSouthPanel.add(startGameButton);
+        mainMenuSouthPanel.add(Box.createVerticalStrut(20));
         mainMenuSouthPanel.add(aboutGameButton);
+        mainMenuSouthPanel.add(Box.createVerticalStrut(20));
         mainMenuSouthPanel.add(instructionsGameButton);
+        mainMenuSouthPanel.add(Box.createVerticalStrut(20));
 
         //add listeners to all of the buttons, and set their sizes
         startGameButton.addActionListener(new ButtonListener());
+        startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         aboutGameButton.addActionListener(new ButtonListener());
+        aboutGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         instructionsGameButton.addActionListener(new ButtonListener());
+        instructionsGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startGameButton.setPreferredSize(new Dimension(mainMenuButtonSizes[0],mainMenuButtonSizes[1]));
         aboutGameButton.setPreferredSize(new Dimension(mainMenuButtonSizes[0],mainMenuButtonSizes[1]));
         instructionsGameButton.setPreferredSize(new Dimension(mainMenuButtonSizes[0],mainMenuButtonSizes[1]));
@@ -223,7 +230,6 @@ class GameWindow extends JFrame{
     public static void setSoftDropTetrimino(boolean drop) {
         if (drop) {
             t2.setDelay(100);
-            resetDropTimer();
         } else {
             t2.setDelay(dropSpeed);
         }

@@ -19,3 +19,9 @@ Solution: Upon reviewing my code, I realized that the "tetriminoDropCheck" metho
 	  the "tetriminoDrop" method to erase the existing block, before performing the check, and then recreating it (either one down, if valid, or in the same place, if not
 	  valid)
 
+3) The setSoftDropTetrimino method (within the GameWindow class, in the Tetris.java file) SHOULD speed up the drop speed of the Tetrimino. However, the method will stop the
+   movement of the Tetrimino for a short period of time before speeding up the Tetrimino
+Solution: The system will wait until the timer has reached it's next tick before changing the tick speed (it will not reset upon having the delay time changed),
+/TODO/
+
+4) /TODO/
