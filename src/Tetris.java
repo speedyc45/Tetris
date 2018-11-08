@@ -32,7 +32,9 @@ class StartWindow extends JFrame{
     private JButton aboutGameButton;
     private JButton instructionsGameButton;
     private JLabel mainTitle;
-    private JLabel gameLogo;
+    private JLabel gameLogo; //320x222
+    private ImageIcon tetrisLogo;
+    private ImageIcon tetrisInstructions;
     private int[] mainMenuButtonSizes = new int[2];
     //private int[] backgroundColor = new int[3];
 
@@ -44,7 +46,9 @@ class StartWindow extends JFrame{
         mainMenuCenterPanel = new JPanel();
         mainMenuSouthPanel = new JPanel();
         mainTitle = new JLabel("Welcome to TETRIS!");
-        gameLogo = new JLabel(new ImageIcon("assets\\Tetris_Logo.png"));
+        tetrisLogo = new ImageIcon("assets\\Tetris_Logo.png");
+        tetrisInstructions = new ImageIcon("assets\\Tetris_Instructions.png");
+        gameLogo = new JLabel(tetrisLogo);
         startGameButton = new JButton("Start Game");
         aboutGameButton = new JButton("About Game");
         instructionsGameButton = new JButton("Game Instructions");
@@ -103,6 +107,16 @@ class StartWindow extends JFrame{
     public void StartGame() {
         this.setVisible(false);
         new GameWindow();
+    }
+
+    //
+    public void showInstructions() {
+        gameLogo.setIcon(tetrisInstructions);
+    }
+
+    //
+    public void showAboutGame() {
+        gameLogo.setIcon(tetrisLogo);
     }
 
     //
@@ -399,7 +413,7 @@ class PaintSurface extends JComponent {
 
 //handles key input
 class KeyListener implements java.awt.event.KeyListener {
-    private static boolean releaseKeyShift = false;
+    private static boolean releaseKeyReturn = false;
     private static boolean releaseKeySpace = false;
     private static boolean releaseKeyLeft = false;
     private static boolean releaseKeyRight = false;
@@ -430,9 +444,9 @@ class KeyListener implements java.awt.event.KeyListener {
             System.out.println("Rotating the tetrimino right...");
             GameWindow.rotateTetrimino(Tetrimino.ROTATE_RIGHT);
             releaseKeyDown = true;
-        } else if (e.getKeyCode() == 16 && !releaseKeyShift) { //check for the shift key, and if it's being pressed again
+        } else if (e.getKeyCode() == 10 && !releaseKeyReturn) { //check for the return key, and if it's being pressed again
             GameWindow.setSoftDropTetrimino(true);
-            releaseKeyShift = true;
+            releaseKeyReturn = true;
         } else if (e.getKeyCode() == 27) { //check for the escape key, then quit if pressed
             if (GameWindow.getGamePaused()) {
                 GameWindow.pauseGame(false);
@@ -454,9 +468,9 @@ class KeyListener implements java.awt.event.KeyListener {
             releaseKeyRight = false;
         } else if (e.getKeyCode() == 40) { //check for the down arrow key
             releaseKeyDown = false;
-        } else if (e.getKeyCode() == 16) { //check for the shift key
+        } else if (e.getKeyCode() == 10) { //check for the return key
             GameWindow.setSoftDropTetrimino(false);
-            releaseKeyShift = false;
+            releaseKeyReturn = false;
         }
         System.out.println("Key Released: " + e.getKeyCode());
     }
@@ -502,10 +516,10 @@ class ButtonListener implements java.awt.event.ActionListener {
             Tetris.startMenu.StartGame();
         } else if (e.getActionCommand().equals("About Game")) {
             System.out.println("About button clicked...");
-            //TODO
+            Tetris.startMenu.showAboutGame();
         } else if (e.getActionCommand().equals("Game Instructions")) {
             System.out.println("Instructions button clicked...");
-            //TODO
+            Tetris.startMenu.showInstructions();
         }
     }
 }
