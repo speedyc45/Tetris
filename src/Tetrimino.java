@@ -1,6 +1,7 @@
-//
 
-//class that represents a "Tetrimino" - a falling block within the Tetris game
+/*
+ * DESC: Class that represents a "Tetrimino" - a falling block within the Tetris game
+ */
 public class Tetrimino {
     //initialize the necessary variables
     private int[][] shape;
@@ -12,11 +13,18 @@ public class Tetrimino {
     public static final int ROTATE_RIGHT = 1;
 
 
-    //default constructor
+    /*
+     * PRE: Null
+     * POST: Runs the Tetrimino(int shapeNum) constructor with a value of 1
+     */
     public Tetrimino() {
         this(1);
     } //end of Tetrimino default constructor
 
+    /*
+     * PRE: Null
+     * POST: Creates a copy of a given Tetrimino object
+     */
     public Tetrimino(Tetrimino t) {
         shapeNum = t.getShapeNum();
 
@@ -30,7 +38,10 @@ public class Tetrimino {
         yCoord = t.getyCoord();
     }
 
-    //create a Tetrimino given a number to decide the shape
+    /*
+     * PRE: Null
+     * POST: Creates a Tetrimino given a number to decide the shape
+     */
     public Tetrimino(int shapeNum) {
         this.shapeNum = shapeNum;
 
@@ -123,8 +134,11 @@ public class Tetrimino {
 
     } //end of Tetrimino(int shapeNum) constructor
 
-    //rotates a Tetriminos shape so that it pivots upon the central axis 90deg left
-    //based on this image: https://vignette.wikia.nocookie.net/tetrisconcept/images/3/3d/SRS-pieces.png/revision/latest?cb=20060626173148
+    /*
+     * PRE: An integer of -1 or +1 must be passed as a parameter
+     * POST: Rotates a Tetrimino's shape so that it pivots upon the central axis 90 degrees left
+     *       based on this image: https://vignette.wikia.nocookie.net/tetrisconcept/images/3/3d/SRS-pieces.png/revision/latest?cb=20060626173148
+     */
     public void rotate(int rotateDir) {
         int[][] newShape;
         int rotateLeftCounter = 0;
@@ -197,26 +211,52 @@ public class Tetrimino {
 
     } //end of rotate method
 
-    public int getShapeNum() {
-        return this.shapeNum;
-    }
+    /*
+     * PRE: Null
+     * POST: Returns the shapeNum int
+     */
+    public int getShapeNum() { return this.shapeNum; }
 
-    public int getSize() {
-        return this.size;
-    }
+    /*
+     * PRE: Null
+     * POST: Returns the size int
+     */
+    public int getSize() { return this.size; }
 
-    public int[][] getShape() {
-        return this.shape;
-    }
+    /*
+     * PRE: Null
+     * POST: Returns the shape int[][]
+     */
+    public int[][] getShape() { return this.shape; }
 
+    /*
+     * PRE: Null
+     * POST: Return the xCoord int
+     */
     public int getxCoord() {return xCoord;}
 
+    /*
+     * PRE: Null
+     * POST: Return the yCoord int
+     */
     public int getyCoord() {return yCoord;}
 
+    /*
+     * PRE: Sent an int parameter
+     * POST: Sets the xCoord int to the given parameter
+     */
     public void setxCoord(int x) {this.xCoord = x;}
 
+    /*
+     * PRE: Sent an int parameter
+     * POST: Sets the yCoord int to the given parameter
+     */
     public void setyCoord(int y) {this.yCoord = y;}
-    //
+
+    /*
+     * PRE: Null
+     * POST: Returns a string with the shape int[][] array
+     */
     public String toString() {
         String report = "";
         report += "-------------------------\n";

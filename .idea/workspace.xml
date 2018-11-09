@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b05d5c43-6b85-4e00-9383-07a874378caf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/Tetris_Logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/Tetris_Logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/ButtonListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/ButtonListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/GameWindow$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/GameWindow$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/GameWindow$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/GameWindow$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/GameWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/GameWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/KeyListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/KeyListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/PaintSurface.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/PaintSurface.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/StartWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/StartWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Tetris/WindowListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Tetris/WindowListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tetrimino.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tetrimino.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tetris.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tetris.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -66,27 +58,28 @@
     <session id="-1227789400">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.70" value="1" />
           <entry key="project.open.time.71" value="1" />
           <entry key="project.open.time.73" value="1" />
           <entry key="project.open.time.74" value="1" />
+          <entry key="project.open.time.75" value="1" />
           <entry key="project.open.time.76" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.85" value="1" />
           <entry key="project.open.time.86" value="1" />
           <entry key="project.open.time.87" value="1" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="14205" />
+          <entry key="java" value="20414" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="14205" />
+          <entry key="JAVA" value="20414" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -103,11 +96,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Tetris.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
-              <caret line="504" lean-forward="true" selection-start-line="504" selection-end-line="504" />
+            <state relative-caret-position="552">
+              <caret line="603" lean-forward="true" selection-start-line="603" selection-end-line="603" />
+              <folding>
+                <element signature="e#0#22715#0" expanded="true" />
+                <element signature="e#584#585#0" expanded="true" />
+                <element signature="e#629#630#0" expanded="true" />
+                <element signature="e#20073#20074#0" expanded="true" />
+                <element signature="e#20124#20125#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -115,17 +115,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Tetrimino.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3502">
-              <caret line="214" selection-start-line="214" selection-end-line="214" />
+            <state relative-caret-position="4165">
+              <caret line="245" column="55" lean-forward="true" selection-start-line="245" selection-start-column="55" selection-end-line="245" selection-end-column="55" />
+              <folding>
+                <element signature="e#557#558#0" expanded="true" />
+                <element signature="e#580#581#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+            <state relative-caret-position="5757">
+              <caret line="555" column="27" selection-start-line="555" selection-start-column="27" selection-end-line="555" selection-end-column="27" />
+              <folding>
+                <element signature="e#19135#19136#0" expanded="true" />
+                <element signature="e#19168#19169#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -153,6 +161,9 @@
       <find>actionlistener</find>
       <find>WindowConstants</find>
       <find>drop</find>
+      <find>close</find>
+      <find>closeAppl</find>
+      <find>LEFT</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -161,9 +172,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Board.java" />
         <option value="$PROJECT_DIR$/src/Tetrimino.java" />
         <option value="$PROJECT_DIR$/src/Tetris.java" />
+        <option value="$PROJECT_DIR$/src/Board.java" />
       </list>
     </option>
   </component>
@@ -174,7 +185,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
+    <option name="x" value="777" />
+    <option name="y" value="-9" />
     <option name="width" value="758" />
     <option name="height" value="991" />
   </component>
@@ -187,7 +199,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541444548867" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541733195838" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -208,7 +220,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Tetris" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../../../jdk1.8.0_181" />
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Tetris" />
       <module name="Tetris" />
@@ -236,14 +248,15 @@
       <workItem from="1540002285089" duration="247000" />
       <workItem from="1540002625647" duration="7228000" />
       <workItem from="1541640172075" duration="4601000" />
+      <workItem from="1541718356144" duration="10811000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44426000" />
+    <option name="totallyTimeSpent" value="55237000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4954683" weight="0.2979798" />
       <window_info id="Structure" order="1" sideWeight="0.50453174" side_tool="true" weight="0.2979798" />
@@ -286,22 +299,37 @@
     <entry file="file://$PROJECT_DIR$/../../TestingApplication/src/TestingApplication.java" />
     <entry file="file://$PROJECT_DIR$/src/Tetris.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="504" lean-forward="true" selection-start-line="504" selection-end-line="504" />
+        <state relative-caret-position="552">
+          <caret line="603" lean-forward="true" selection-start-line="603" selection-end-line="603" />
+          <folding>
+            <element signature="e#0#22715#0" expanded="true" />
+            <element signature="e#584#585#0" expanded="true" />
+            <element signature="e#629#630#0" expanded="true" />
+            <element signature="e#20073#20074#0" expanded="true" />
+            <element signature="e#20124#20125#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tetrimino.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3502">
-          <caret line="214" selection-start-line="214" selection-end-line="214" />
+        <state relative-caret-position="4165">
+          <caret line="245" column="55" lean-forward="true" selection-start-line="245" selection-start-column="55" selection-end-line="245" selection-end-column="55" />
+          <folding>
+            <element signature="e#557#558#0" expanded="true" />
+            <element signature="e#580#581#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        <state relative-caret-position="5757">
+          <caret line="555" column="27" selection-start-line="555" selection-start-column="27" selection-end-line="555" selection-end-column="27" />
+          <folding>
+            <element signature="e#19135#19136#0" expanded="true" />
+            <element signature="e#19168#19169#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

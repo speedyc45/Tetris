@@ -1,29 +1,40 @@
 /*
  * Tetris.java
- * Description: /TODO/
+ * Description: A GUI based game where the user attempts to manage falling blocks and fill lines to earn points. If the
+ *              tower of falling blocks becomes too high, the user loses and their score is recorded. The game begins in
+ *              a main menu which gives the user any instructions or contact info needed.
  *
- * Written by: Callum Kipin
+ * Coded by: Callum Kipin
  * Date Started: Oct 2nd, 2018
  * Date Finished: /TODO/
  */
 
+//import the necessary libraries
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/*
+ * DESC: main Tetris class (runs upon launch)
+ */
 public class Tetris {
-    //
+    //initialize the startMenu object
     public static StartWindow startMenu = null;
 
+    /* PRE: Null
+     * POST: StartWindow constructor is called and startMenu object is given the reference
+     */
     public static void main(String[] args) {
         startMenu = new StartWindow();
     } //end of main method
 
 } //end of main Tetris class
 
-//
+/*
+ * DESC: StartWindow class is a JFrame window that is created on launch and can run the game, show instructions, or show the title screen
+ */
 class StartWindow extends JFrame{
-    //for the main menu window
+    //define the variables for the main menu window
     private JPanel mainMenuPanel;
     private JPanel mainMenuNorthPanel;
     private JPanel mainMenuCenterPanel;
@@ -32,13 +43,15 @@ class StartWindow extends JFrame{
     private JButton aboutGameButton;
     private JButton instructionsGameButton;
     private JLabel mainTitle;
-    private JLabel gameLogo; //320x222
-    private ImageIcon tetrisLogo;
-    private ImageIcon tetrisInstructions;
+    private JLabel gameLogo;
+    private ImageIcon tetrisLogo; //320x222 pixels
+    private ImageIcon tetrisInstructions; //320x245 pixels
     private int[] mainMenuButtonSizes = new int[2];
-    //private int[] backgroundColor = new int[3];
 
-    //
+    /*
+     * PRE: Null
+     * POST: StartWindow object created, which displays a GUI interface for the user to interact with (main menu)
+     */
     public StartWindow() {
         //set the size, location, close operation, and title of the window //TODO
         mainMenuPanel = new JPanel();
@@ -72,12 +85,6 @@ class StartWindow extends JFrame{
         mainMenuPanel.add(mainMenuCenterPanel, BorderLayout.CENTER);
         mainMenuPanel.add(mainMenuSouthPanel, BorderLayout.SOUTH);
 
-        /*//set the colours of the main three panels
-        mainMenuNorthPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
-        mainMenuCenterPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
-        mainMenuSouthPanel.setBackground(new Color(backgroundColor[0], backgroundColor[1], backgroundColor[2]));
-        */
-
         //add the buttons and text to their respective panels, separating the buttons by 20 pixels each
         mainMenuNorthPanel.add(mainTitle);
         mainMenuCenterPanel.add(gameLogo);
@@ -89,7 +96,7 @@ class StartWindow extends JFrame{
         mainMenuSouthPanel.add(instructionsGameButton);
         mainMenuSouthPanel.add(Box.createVerticalStrut(20));
 
-        //add listeners to all of the buttons, and set their sizes
+        //add listeners to all of the buttons, set their sizes, and align them to the center axis
         startGameButton.addActionListener(new ButtonListener());
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         aboutGameButton.addActionListener(new ButtonListener());
@@ -103,24 +110,36 @@ class StartWindow extends JFrame{
         this.setVisible(true);
     } //end of StartWindow constructor
 
-    //
+    /*
+     * PRE: Null
+     * POST: Main menu window is made invisible, and the game window is created and opens to replace it
+     */
     public void StartGame() {
         this.setVisible(false);
         new GameWindow();
     }
 
-    //
+    /*
+     * PRE: Null
+     * POST: The gameLogo image is changed to show instructions for the user
+     */
     public void showInstructions() {
         gameLogo.setIcon(tetrisInstructions);
     }
 
-    //
+    /*
+     * PRE: Null
+     * POST: The gameLogo image is changed to show the logo and contact info for the user
+     */
     public void showAboutGame() {
         gameLogo.setIcon(tetrisLogo);
     }
 
-    //
-    public static void CloseApplication(boolean forceClose) {
+    /*
+     * PRE: A boolean variable is sent as a parameter
+     * POST: The system will close (if parameter == true) or ask the user if the wish to close (and close if necessary)
+     */
+    public static void closeApplication(boolean forceClose) {
         //if the application is being forceClosed, close it
         if (forceClose) {
             System.out.println("Closing application...");
@@ -132,6 +151,7 @@ class StartWindow extends JFrame{
         int closeApp = JOptionPane.showConfirmDialog(null, "Are you sure you want to close the application?",
                 "Close Application", JOptionPane.YES_NO_OPTION);
 
+        //if the user selected yes, close the application
         if (closeApp == 0) {
             System.out.println("Closing application...");
             System.exit(0);
@@ -139,7 +159,9 @@ class StartWindow extends JFrame{
     }
 }
 
-//
+/*
+ * DESC: Class for the main game window (inheriting from JFrame) that manages the game and displays the GUI for the user
+ */
 class GameWindow extends JFrame{
     //initialize the necessary variables
     public static int width = 350;
@@ -153,6 +175,10 @@ class GameWindow extends JFrame{
     private static Tetrimino[] nextTetrimino = new Tetrimino[4];
     private static Timer t2;
 
+    /*
+     * PRE:
+     * POST:
+     */
     public GameWindow() {
         //set the dimensions, title, closing operation, and center it in the screen
         this.setSize(width, height);
@@ -188,7 +214,10 @@ class GameWindow extends JFrame{
         this.setVisible(true);
     } //end of GameWindow constructor method
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static void newTetrimino() {
         //clear any lines if possible, then create another tetrimino
         Board.clearLine();
@@ -220,7 +249,10 @@ class GameWindow extends JFrame{
         }
     }
 
-    //increases the drop speed of the tetriminoes
+    /*
+     * PRE:
+     * POST: Increases the drop speed of the tetriminoes
+     */
     public static void levelUp() {
         if (Board.getLevel() < 4) {
             Board.setLevel(Board.getLevel() + 1);
@@ -234,13 +266,22 @@ class GameWindow extends JFrame{
 
     }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static void rotateTetrimino(int rot) { Board.tetriminoRotate(current, rot); }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static void setSoftDropTetrimino(boolean drop) {
         if (drop) {
             t2.setDelay(100);
@@ -249,13 +290,22 @@ class GameWindow extends JFrame{
         }
     }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); resetDropTimer(); }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     private static void resetDropTimer() { t2.stop(); Board.tetriminoDrop(current, false); t2.start(); }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static void pauseGame(boolean pause) {
         if (pause) {
             gamePaused = true;
@@ -266,13 +316,22 @@ class GameWindow extends JFrame{
         }
     }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static Tetrimino[] getNextTetrimino() { return nextTetrimino; }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public static boolean getGamePaused() { return gamePaused; }
 
-    //
+    /*
+     * PRE:
+     * POST:
+     */
     public String toString() {
         String report = "";
 
@@ -286,6 +345,9 @@ class GameWindow extends JFrame{
 
 } //end of GameWindow class
 
+/*
+ * DESC:
+ */
 class PaintSurface extends JComponent {
     //define the necessary variables
     private Image gridBackground; //note: border length is 4 pixels
@@ -299,9 +361,12 @@ class PaintSurface extends JComponent {
     private int blockPosY = backgroundOffsetY + 5;
     private Board tetrisBoard = new Board();
 
-    //method for repainting the canvas
+    /*
+     * PRE:
+     * POST: "Repaints" the canvas by redrawing any graphics inside it
+     */
     public void paint(Graphics g) {
-        //create the images, and then draw them (and the score factors)
+        //create the images for the game, and then draw them (and the score factors)
         gridBackground = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
         nextBackground = new ImageIcon("assets\\Tetris_Grid_Next_Alt.png").getImage();
         holdBackground = new ImageIcon("assets\\Tetris_Grid_Hold.png").getImage();
@@ -311,6 +376,7 @@ class PaintSurface extends JComponent {
         g.drawString("LEVEL: " + Board.getLevel(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 15);
         g.drawString("LINES CLEARED: " + Board.getRowsCleared(), blockPosX*2 + 20*Board.COLUMNS, 20*Board.ROWS + 5);
 
+        //check if the game is paused, and add the "Game Paused" text if so
         if (GameWindow.getGamePaused()) {
             g.drawString("GAME PAUSED", blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 65);
         }
@@ -397,7 +463,10 @@ class PaintSurface extends JComponent {
 
     } //end of paint method
 
-    //
+    /*
+     * PRE: Null
+     * POST: Returns a string of basic information of the PaintSurface object
+     */
     public String toString() {
         String report = "";
 
@@ -411,7 +480,9 @@ class PaintSurface extends JComponent {
 
 } //end of PaintSurface class
 
-//handles key input
+/*
+ * DESC: Class that handles key input during the game's runtime
+ */
 class KeyListener implements java.awt.event.KeyListener {
     private static boolean releaseKeyReturn = false;
     private static boolean releaseKeySpace = false;
@@ -420,8 +491,14 @@ class KeyListener implements java.awt.event.KeyListener {
     private static boolean releaseKeyUp = false;
     private static boolean releaseKeyDown = false;
 
+    @Override
     public void keyTyped(KeyEvent e) { }
 
+    /*
+     * PRE: /TODO/
+     * POST: The corresponding method (to the key press) is called, and the system flags the key as "pressed"
+     */
+    @Override
     public void keyPressed(KeyEvent e ) {
         if (e.getKeyCode() == 32 && !releaseKeySpace) { //check for the space bar, and if it's being pressed again
             System.out.println("Instant dropping tetrimino...");
@@ -454,9 +531,13 @@ class KeyListener implements java.awt.event.KeyListener {
                 GameWindow.pauseGame(true);
             }
         }
-        System.out.println("Key Pressed: " + e.getKeyCode());
+        //System.out.println("Key Pressed: " + e.getKeyCode());
     }
 
+    /*
+     * PRE: /TODO/
+     * POST: The system will unflag a pressed key when it is released
+     */
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == 32) { //check for the left arrow key
             releaseKeySpace = false;
@@ -476,7 +557,9 @@ class KeyListener implements java.awt.event.KeyListener {
     }
 } //end of KeyListener class
 
-//a listener for when the user interacts with the frame (window)
+/*
+ * DESC: Class that acts as a listener for when the user interacts with the frame (window) buttons (e.g. close, minimize, etc.)
+ */
 class WindowListener implements java.awt.event.WindowListener {
 
     @Override
@@ -485,9 +568,13 @@ class WindowListener implements java.awt.event.WindowListener {
     @Override
     public void windowClosed(WindowEvent e) { }
 
+    /*
+     * PRE: /TODO/
+     * POST: The closeApplication method is called (asks the user if they wish to close the program)
+     */
     @Override
     public void windowClosing(WindowEvent e) {
-        StartWindow.CloseApplication(false);
+        StartWindow.closeApplication(false);
     }
 
     @Override
@@ -503,10 +590,15 @@ class WindowListener implements java.awt.event.WindowListener {
     public void windowOpened(WindowEvent e) { }
 }
 
-//a listener for when the user interacts with one of the buttons in the GUI
+/*
+ * DESC: Class that acts as a listener for when the user interacts with one of the buttons in the GUI
+ */
 class ButtonListener implements java.awt.event.ActionListener {
 
-    //interaction with the buttons "Start", "Help", and "Exit"
+    /*
+     * PRE: /TODO/
+     * POST: Calls the required method to start the game, show the game logo, or show the instructions
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 

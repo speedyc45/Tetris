@@ -1,9 +1,10 @@
-//
 
+//import the necessary libraries
 import javax.swing.*;
-import java.awt.*;
 
-//class that manages the tetris game board
+/*
+ * DESC: Class that manages the Tetris game board (positioning and collision)
+ */
 public class Board {
     //initialize the necessary variables
     private static int[][] boardArray;
@@ -13,8 +14,8 @@ public class Board {
     private static int blocksSpawned = 0;
     public static final int COLUMNS = 10;
     public static final int ROWS = 20;
-    public static final int MOVE_LEFT = 1;
-    public static final int MOVE_RIGHT = 2;
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
     public static final ImageIcon blockYellow = new ImageIcon("assets\\Tetris_Block_Yellow.png");
     public static final ImageIcon blockPurple = new ImageIcon("assets\\Tetris_Block_Purple.png");
     public static final ImageIcon blockPink = new ImageIcon("assets\\Tetris_Block_Pink.png");
@@ -23,7 +24,10 @@ public class Board {
     public static final ImageIcon blockGreen = new ImageIcon("assets\\Tetris_Block_Green.png");
     public static final ImageIcon blockBlue = new ImageIcon("assets\\Tetris_Block_Blue.png");
 
-    //default constructor
+    /*
+     * PRE: Null
+     * POST: Creates a default board object and initializes the 2D int array for the board as empty
+     */
     public Board() {
         //create the size of the board, which starts with no blocks
         boardArray = new int[ROWS][COLUMNS];
@@ -36,8 +40,10 @@ public class Board {
         }
     } //end of default Board() constructor
 
-    //tests to see if a Tetrimino can be added to the board, and does so if possible
-    //reference for legal spawn locations: https://harddrop.com/wiki/Spawn_Location
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null
+     * POST: Returns a boolean describing if a Tetrimino can be spawned on the board array
+     */
     private static boolean addTetriminoCheck(Tetrimino t) {
         int[][] validSpawnLocations = new int[2][4];
         boolean validSpawn = true;
@@ -73,11 +79,13 @@ public class Board {
             }
         }
 
-        //System.out.println("addTetriminoCheck returning: " + validSpawn);
         return validSpawn;
     } //end of addTetriminoCheck method
 
-    //adds a tetrimino block to the board
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null
+     * POST: Adds a Tetrimino block to the board (according to https://harddrop.com/wiki/Spawn_Location locations)
+     */
     public static void addTetrimino(Tetrimino t) {
         //if the tetrimino can be added
         if (addTetriminoCheck(t)) {
@@ -119,8 +127,12 @@ public class Board {
 
     } //end of addTetrimino method
 
-    //updates the board (moves blocks if necessary)
+    /*
+     * PRE: Takes a Tetrimino object and boolean as parameters that cannot be null
+     * POST: Updates the board (moves blocks if necessary inside the board array)
+     */
     public static void tetriminoDrop(Tetrimino t, boolean override) {
+        //define and initialize the local variables
         int size = t.getSize();
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
@@ -129,30 +141,22 @@ public class Board {
         erase(t);
 
         if (override || tetriminoDropCheck(t)) {
-            //System.out.println("Valid drop. Dropping tetrimino now...");
-            //System.out.println("Old - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size);
-
-            //update the location
+            //update the location and redraw the tetrimino that was erased
             t.setyCoord(yCoord+1);
-
-            //redraw the tetrimino that was erased
             reDraw(t);
-
-            //test print statement
-            //System.out.println("New - ROW: " + t.getyCoord() + " COL:" + t.getxCoord() + " Size:" + size);
 
         } else {
-            //redraw the tetrimino that was erased
+            //redraw the tetrimino that was erased and spawn another tetrimino
             reDraw(t);
-
-            //spawn another tetrimino
-            System.out.println("Tetrimino can no longer fall, spawning a new block");
             GameWindow.newTetrimino();
         }
 
     } //end of update method
 
-    //check to see if the move is possible (compare arrays for conflicts)
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null
+     * POST: Check to see if the Tetrimino's move is possible (compare arrays for conflicts)
+     */
     private static boolean tetriminoDropCheck(Tetrimino t) {
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
@@ -185,24 +189,28 @@ public class Board {
         return true;
     } //end of tetriminoDropCheck method
 
-    //moves the tetrimino in the given direction
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
+     * POST: Moves the tetrimino in the given horizontal direction
+     */
     public static void tetriminoMove(Tetrimino t, int direction) {
         //direction 1=left, 2=right
 
-        //erase the tetrimino (so it can't collide with itself) before checking for collisions
+        //erase the tetrimino (so it can't collide with itself) before checking for collisions, then move the Tetrimino
+        //if possible
         erase(t);
         switch (direction) {
-            //left
-            case 1:
-                if (tetriminoMoveCheck(t, 1)) {
+            //left move
+            case LEFT:
+                if (tetriminoMoveCheck(t, LEFT)) {
                     t.setxCoord(t.getxCoord()-1);
                 } else {
                     System.out.println("Invalid move");
                 }
                 break;
-            //right
-            case 2:
-                if (tetriminoMoveCheck(t, 2)) {
+            //right move
+            case RIGHT:
+                if (tetriminoMoveCheck(t, RIGHT)) {
                     t.setxCoord(t.getxCoord()+1);
                 } else {
                     System.out.println("Invalid move");
@@ -214,16 +222,18 @@ public class Board {
         reDraw(t);
     }
 
-    //checks if the move of a tetrimino is valid
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
+     * POST: checks if the move of a tetrimino is valid
+     */
     private static boolean tetriminoMoveCheck(Tetrimino t, int direction) {
-        //directions: 1=left,2=right
+        //define and initialize the local variables
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
-        int rowOffset = 0;
-        int colOffset = 0;
 
+        //check if the horizontal move is possible, return true if so (false otherwise)
         switch (direction) {
-            case 1: //left
+            case LEFT: //left
                 //find the leftmost block in the tetrimino, check if it will go past the left edge of the grid
                 Outer: for (int col = 0; col < t.getShape()[0].length; col++) {
                     for (int row = 0; row < t.getShape().length; row++) {
@@ -247,7 +257,7 @@ public class Board {
                     }
                 }
                 break;
-            case 2: //right
+            case RIGHT: //right
                 //find the rightmost block in the tetrimino, check if it will go past the right edge of the grid
                 Outer: for (int col = t.getSize()-1; col > 0; col--) {
                     for (int row = 0; row < t.getShape().length; row++) {
@@ -276,9 +286,12 @@ public class Board {
         return true;
     }
 
-    //moves the tetrimino in the given direction
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
+     * POST: Rotates the tetrimino in the given direction
+     */
     public static void tetriminoRotate(Tetrimino t, int rotation) {
-        //rotation -1=left, 1=right
+        //rotation 1=left, 2=right
 
         //erase the tetrimino (so it can't collide with itself) before checking for collisions, rotating if possible,
         //then redrawing the tetrimino
@@ -291,10 +304,12 @@ public class Board {
         reDraw(t);
     } //end of tetriminoRotate method
 
-    //moves the tetrimino in the given direction
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
+     * POST: Returns a boolean which states whether it is possible for the given Tetrimino to rotate on the board
+     */
     private static boolean tetriminoRotateCheck(Tetrimino t, int rotation) {
-        //rotation -1=left, 1=right
-
+        //rotate the Tetrimino's shape array
         t.rotate(rotation);
 
         //check if the leftmost or rightmost block in the tetrimino will go past the edge of the grid
@@ -325,27 +340,19 @@ public class Board {
             System.out.println();
         }
 
-        //Testing!!!
-        for (int row = 0; row < t.getShape().length; row++) {
-            for (int col = 0; col < t.getShape()[0].length; col++) {
-                if (t.getShape()[row][col] != 0 && boardArray[t.getyCoord()+row][t.getxCoord()+col] != 0) {
-                    System.out.println("Will return false - block collision on rotation");
-                    t.rotate(-rotation);
-                    return false;
-                }
-                System.out.print(t.getShape()[row][col]);
-            }
-            System.out.println();
-        }//TESTING
-
+        //Undo the rotation of the Tetrimino's shape array and return true
         t.rotate(-rotation);
         return true;
     } //end of tetriminoRotateCheck method
 
-    //instantly drops a tetrimino to the bottom of a grid
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null
+     * POST: Instantly drops a Tetrimino as far down the board as is possible
+     */
     public static void tetriminoInstantDrop(Tetrimino t) {
 
         //while the drop is valid, continue to drop the block
+        //(erase it, check for collisions, drop if possible, then redraw - loop while valid)
         erase(t);
         while (tetriminoDropCheck(t)) {
             tetriminoDrop(t, true);
@@ -354,7 +361,10 @@ public class Board {
         reDraw(t);
     } //end of tetriminoInstantDrop method
 
-    //redraws a block after a rotation or drop
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null
+     * POST: Removes the respective integer values in the board array of the given Tetrimino object ("erases" it)
+     */
     public static void erase(Tetrimino t) {
         int size = t.getSize();
         int xCoord = t.getxCoord();
@@ -396,7 +406,10 @@ public class Board {
         }
     } //end of erase method
 
-    //redraws a block after a rotation or drop
+    /*
+     * PRE: Takes a Tetrimino object as a parameter that cannot be null
+     * POST: Recreates the respective integer values in the board array of the given Tetrimino object ("redraws" it)
+     */
     public static void reDraw(Tetrimino t) {
         int yCoord = t.getyCoord();
         int xCoord = t.getxCoord();
@@ -426,6 +439,41 @@ public class Board {
         }
     } //end of reDraw method
 
+    /*
+     * PRE: Takes an int which must be between 0 and 19 inclusive
+     * POST: Returns an integer which signifies which row to clear (if it is a continuous row), or returns 20 if no row
+     *       should be cleared
+     */
+    private static int clearLineCheck(int startRow) {
+        int rowCounter = 0;
+
+        //cycle through the board and checks for full lines to be cleared
+        for (int row = startRow; row < boardArray.length; row++) {
+            for (int col = 0; col < boardArray[0].length; col++) {
+                //add the the counter if there is a block in the row
+                if (boardArray[row][col] != 0) {
+                    rowCounter++;
+                }
+
+                //if the entire row is blocks, return the row number
+                if (rowCounter == boardArray[0].length) {
+                    return row;
+                }
+            }
+            //restart the rowCounter as the loop reaches a new row
+            rowCounter = 0;
+        }
+
+        //if no row was return, return an illegal row
+        return 20;
+    }
+
+    /*
+     * PRE: Null
+     * POST: Removes a horizontal row of integer values from the board array clearLineCheck() returns an int between 0
+     *       and 19 inclusive, and moves all integer values in the rows above down one row. Will also call the levelUp()
+     *       method in the GameWindow class if enough lines are cleared (speeding up the drop speed of Tetriminoes)
+     */
     public static void clearLine() {
         boolean runLoop;
         int clearLineRow;
@@ -471,44 +519,54 @@ public class Board {
         }
     }
 
-    private static int clearLineCheck(int startRow) {
-        int rowCounter = 0;
-
-        //cycle through the board and checks for full lines to be cleared
-        for (int row = startRow; row < boardArray.length; row++) {
-            for (int col = 0; col < boardArray[0].length; col++) {
-                //add the the counter if there is a block in the row
-                if (boardArray[row][col] != 0) {
-                    rowCounter++;
-                }
-
-                //if the entire row is blocks, return the row number
-                if (rowCounter == boardArray[0].length) {
-                    return row;
-                }
-            }
-            //restart the rowCounter as the loop reaches a new row
-            rowCounter = 0;
-        }
-
-        //if no row was return, return an illegal row
-        return 20;
-    }
-
+    /*
+     * PRE: Null
+     * POST: Returns the boardArray int[][]
+     */
     public int[][] getBoardArray() {
         return boardArray;
-    } //end of getBoardArray() method
+    }
 
-    public static int getRowsCleared() { return rowsCleared; } //end of getRowsCleared() method
+    /*
+     * PRE: Null
+     * POST: Returns the rowsCleared int
+     */
+    public static int getRowsCleared() { return rowsCleared; }
 
-    public static int getLevel() { return level; } //end of getLevel() method
+    /*
+     * PRE: Null
+     * POST: Returns the level int
+     */
+    public static int getLevel() { return level; }
 
-    public static void setLevel(int num) { level = num; } //end of getLevel() method
+    /*
+     * PRE: Takes an int parameter which cannot be null
+     * POST: Sets the level int as the given int
+     */
+    public static void setLevel(int num) { level = num; }
 
-    public static int getScore() { return score; } //end of getLevel() method
+    /*
+     * PRE: Null
+     * POST: Returns the score int
+     */
+    public static int getScore() { return score; }
 
-    public static int getBlocksSpawned() { return blocksSpawned; } //end of getBlocksSpawned() method
+    /*
+     * PRE: Takes an int parameter which cannot be null
+     * POST: Sets the score int as the given int
+     */
+    public static void setScore(int num) { score = num; }
 
-    public static void setBlocksSpawned(int num) { blocksSpawned = num; } //end of setBlocksSpawned() method
+    /*
+     * PRE: Null
+     * POST: Returns the blocksSpawned int
+     */
+    public static int getBlocksSpawned() { return blocksSpawned; }
+
+    /*
+     * PRE: Takes an int parameter which cannot be null
+     * POST: Sets the blockSpawned int as the given int
+     */
+    public static void setBlocksSpawned(int num) { blocksSpawned = num; }
 
 } //end of Board class
