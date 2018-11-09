@@ -507,7 +507,7 @@ class KeyListener implements java.awt.event.KeyListener {
         } else
         if (e.getKeyCode() == 37 && !releaseKeyLeft) { //check for the left arrow key, and if it's being pressed again
             System.out.println("Moving the tetrimino left...");
-            GameWindow.moveTetrimino(Board.MOVE_LEFT);
+            GameWindow.moveTetrimino(Board.LEFT);
             releaseKeyLeft = true;
         } else if (e.getKeyCode() == 38 && !releaseKeyUp) { //check for the up arrow key, and if it's being pressed again
             System.out.println("Rotating the tetrimino left...");
@@ -515,7 +515,7 @@ class KeyListener implements java.awt.event.KeyListener {
             releaseKeyUp = true;
         } else if (e.getKeyCode() == 39 && !releaseKeyRight) { //check for the right arrow key, and if it's being pressed again
             System.out.println("Moving the tetrimino right...");
-            GameWindow.moveTetrimino(Board.MOVE_RIGHT);
+            GameWindow.moveTetrimino(Board.RIGHT);
             releaseKeyRight = true;
         } else if (e.getKeyCode() == 40 && !releaseKeyDown) { //check for the down arrow key, and if it's being pressed again
             System.out.println("Rotating the tetrimino right...");

@@ -17,7 +17,8 @@
     <session id="-845283587">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
+          <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.16" value="2" />
           <entry key="project.open.time.17" value="1" />
@@ -31,7 +32,7 @@
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.36" value="1" />
           <entry key="project.open.time.38" value="1" />
-          <entry key="project.opened" value="16" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -96,18 +97,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Tetris.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="603" lean-forward="true" selection-start-line="603" selection-end-line="603" />
-              <folding>
-                <element signature="e#0#22715#0" expanded="true" />
-                <element signature="e#584#585#0" expanded="true" />
-                <element signature="e#629#630#0" expanded="true" />
-                <element signature="e#20073#20074#0" expanded="true" />
-                <element signature="e#20124#20125#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="177">
+              <caret line="517" column="43" selection-start-line="517" selection-start-column="43" selection-end-line="517" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -115,25 +109,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Tetrimino.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4165">
-              <caret line="245" column="55" lean-forward="true" selection-start-line="245" selection-start-column="55" selection-end-line="245" selection-end-column="55" />
-              <folding>
-                <element signature="e#557#558#0" expanded="true" />
-                <element signature="e#580#581#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="4131">
+              <caret line="245" column="55" selection-start-line="245" selection-start-column="55" selection-end-line="245" selection-end-column="55" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5757">
+            <state relative-caret-position="177">
               <caret line="555" column="27" selection-start-line="555" selection-start-column="27" selection-end-line="555" selection-end-column="27" />
-              <folding>
-                <element signature="e#19135#19136#0" expanded="true" />
-                <element signature="e#19168#19169#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -173,8 +159,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/Tetrimino.java" />
-        <option value="$PROJECT_DIR$/src/Tetris.java" />
         <option value="$PROJECT_DIR$/src/Board.java" />
+        <option value="$PROJECT_DIR$/src/Tetris.java" />
       </list>
     </option>
   </component>
@@ -220,7 +206,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Tetris" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../../../jdk1.8.0_181" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Tetris" />
       <module name="Tetris" />
@@ -256,7 +242,7 @@
     <option name="totallyTimeSpent" value="55237000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4954683" weight="0.2979798" />
       <window_info id="Structure" order="1" sideWeight="0.50453174" side_tool="true" weight="0.2979798" />
@@ -275,7 +261,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50075644" side_tool="true" weight="0.31260228" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3298731" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.3290993" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -297,39 +283,24 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Block.java" />
     <entry file="file://$PROJECT_DIR$/../../TestingApplication/src/TestingApplication.java" />
-    <entry file="file://$PROJECT_DIR$/src/Tetris.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="603" lean-forward="true" selection-start-line="603" selection-end-line="603" />
-          <folding>
-            <element signature="e#0#22715#0" expanded="true" />
-            <element signature="e#584#585#0" expanded="true" />
-            <element signature="e#629#630#0" expanded="true" />
-            <element signature="e#20073#20074#0" expanded="true" />
-            <element signature="e#20124#20125#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Tetrimino.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4165">
-          <caret line="245" column="55" lean-forward="true" selection-start-line="245" selection-start-column="55" selection-end-line="245" selection-end-column="55" />
-          <folding>
-            <element signature="e#557#558#0" expanded="true" />
-            <element signature="e#580#581#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="4131">
+          <caret line="245" column="55" selection-start-line="245" selection-start-column="55" selection-end-line="245" selection-end-column="55" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5757">
+        <state relative-caret-position="177">
           <caret line="555" column="27" selection-start-line="555" selection-start-column="27" selection-end-line="555" selection-end-column="27" />
-          <folding>
-            <element signature="e#19135#19136#0" expanded="true" />
-            <element signature="e#19168#19169#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tetris.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="517" column="43" selection-start-line="517" selection-start-column="43" selection-end-line="517" selection-end-column="43" />
         </state>
       </provider>
     </entry>
