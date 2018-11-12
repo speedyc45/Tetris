@@ -50,7 +50,7 @@ class StartWindow extends JFrame{
     private JLabel gameLogo;
     private ImageIcon tetrisLogo; //320x222 pixels
     private ImageIcon tetrisInstructions; //320x245 pixels
-    private int[] mainMenuButtonSizes = new int[2];
+    private int[] mainMenuButtonSizes = new int[2]; //x,y
 
     /*
      * PRE: Null
@@ -76,7 +76,7 @@ class StartWindow extends JFrame{
         //set the main menu's default closing operation, size,
         //location, and add the mainMenuPanel
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        this.setSize(GameWindow.width, GameWindow.height);
+        this.setSize(GameWindow.WIDTH, GameWindow.HEIGHT);
         this.setLocationRelativeTo(null);
         this.addWindowListener(new WindowListener());
         this.setContentPane(mainMenuPanel);
@@ -118,6 +118,7 @@ class StartWindow extends JFrame{
      */
     public void StartGame() {
         this.setVisible(false);
+        System.out.println(this);
         new GameWindow();
     }
 
@@ -167,16 +168,34 @@ class StartWindow extends JFrame{
         //otherwise, unpause the game
         GameWindow.pauseGame(false);
     }
-}
+
+    /*
+     * PRE: Null
+     * POST: Returns a string of basic information of the StartWindow object
+     */
+    public String toString() {
+        String report = "";
+
+        report += "-------------------------\n";
+        report += "StartWindow Object\n";
+        report += "WIDTH: " + GameWindow.WIDTH + "\n";
+        report += "HEIGHT: " + GameWindow.HEIGHT + "\n";
+        report += "Button Dimensions - X: " + mainMenuButtonSizes[0] + " Y: " + mainMenuButtonSizes[1] + "\n";
+        report += "Title: " + mainTitle.getText() + "\n";
+        report += "Main Image: " + ((ImageIcon)gameLogo.getIcon()).getDescription() + "\n";
+
+        return report;
+    }
+} //end of StartWindow class
 
 /*
  * DESC: Class for the main game window (inheriting from JFrame) that manages the game and displays the GUI for the user
  */
 class GameWindow extends JFrame{
     //initialize the necessary variables
-    public static int width = 350;
-    public static int height = 465;
-    private final int ANIMATION_REFRESH_RATE = 100;
+    public static final int WIDTH = 360;
+    public static final int HEIGHT = 465;
+    private final int ANIMATION_REFRESH_RATE = 50;
     private static int dropSpeed = 1000;
     private static boolean gameStart = false;
     private static boolean gamePaused = false;
@@ -195,7 +214,7 @@ class GameWindow extends JFrame{
      */
     public GameWindow() {
         //set the dimensions, title, closing operation, center it in the screen, and add a window listener
-        this.setSize(width, height);
+        this.setSize(WIDTH, HEIGHT);
         this.setTitle("Callum's Tetris");
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowListener());
@@ -327,7 +346,7 @@ class GameWindow extends JFrame{
             name = JOptionPane.showInputDialog("Game Over\nPlease enter your name: ");
 
             while (name == null) {
-                name = JOptionPane.showInputDialog("Game Over\nPlease enter your name: ");
+                name = JOptionPane.showInputDialog("Invalid Entry\nPlease enter your name: ");
             }
 
             for (int x = 0; x < name.length(); x++) {
@@ -476,8 +495,15 @@ class GameWindow extends JFrame{
 
         report += "-------------------------\n";
         report += "GameWindow Object\n";
-        report += "Width: " + WIDTH + "\n";
-        report += "Height: " + HEIGHT + "\n";
+        report += "WIDTH: " + WIDTH + "\n";
+        report += "HEIGHT: " + HEIGHT + "\n";
+        report += "GameStarted: " + gameStart + "\n";
+        report += "GameOver: " + gameOver + "\n";
+        report += "GamePaused: " + gamePaused + "\n";
+        report += "Highscore Name: " + highScoreName + "\n";
+        report += "Highscore: " + highScore + "\n";
+        report += "Drop Speed: " + dropSpeed + "\n";
+        report += "Animation Refresh Rate: " + ANIMATION_REFRESH_RATE + "\n";
 
         return report;
     } //end of the toString method
@@ -621,9 +647,10 @@ class PaintSurface extends JComponent {
         report += "PaintSurface Object\n";
         report += "Width: " + WIDTH + "\n";
         report += "Height: " + HEIGHT + "\n";
+        report += "Memory Address: " + super.toString();
 
         return report;
-    } //end of the toString method
+    }
 
 } //end of PaintSurface class
 
@@ -701,6 +728,26 @@ class KeyListener implements java.awt.event.KeyListener {
         }
         System.out.println("Key Released: " + e.getKeyCode());
     }
+
+    /*
+     * PRE: Null
+     * POST: Returns a string of basic information of the KeyListener object
+     */
+    public String toString() {
+        String report = "";
+
+        report += "-------------------------\n";
+        report += "KeyListener Object\n";
+        report += "releaseKeyUp: " + releaseKeyUp + "\n";
+        report += "releaseKeyDown: " + releaseKeyDown + "\n";
+        report += "releaseKeyLeft: " + releaseKeyLeft + "\n";
+        report += "releaseKeyRight: " + releaseKeyRight + "\n";
+        report += "releaseKeySpace: " + releaseKeySpace + "\n";
+        report += "releaseKeyReturn: " + releaseKeyReturn + "\n";
+        report += "Memory Address: " + super.toString();
+
+        return report;
+    }
 } //end of KeyListener class
 
 /*
@@ -732,6 +779,20 @@ class WindowListener implements java.awt.event.WindowListener {
 
     @Override
     public void windowOpened(WindowEvent e) { }
+
+    /*
+     * PRE: Null
+     * POST: Returns a string of basic information of the WindowListener object
+     */
+    public String toString() {
+        String report = "";
+
+        report += "-------------------------\n";
+        report += "WindowListener Object\n";
+        report += "Memory Address: " + super.toString();
+
+        return report;
+    }
 }
 
 /*
@@ -757,5 +818,19 @@ class ButtonListener implements java.awt.event.ActionListener {
             System.out.println("Instructions button clicked...");
             Tetris.startMenu.showInstructions();
         }
+    }
+
+    /*
+     * PRE: Null
+     * POST: Returns a string of basic information of the ButtonListener object
+     */
+    public String toString() {
+        String report = "";
+
+        report += "-------------------------\n";
+        report += "ButtonListener Object\n";
+        report += "Memory Address: " + super.toString();
+
+        return report;
     }
 }
