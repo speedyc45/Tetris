@@ -269,6 +269,23 @@ public class Tetrimino {
         }
 
         return report;
-    } //end of toString method
+    }
+
+    /*
+     * PRE: Takes a Tetrimino object as a parameter which cannot be null
+     * POST: Returns a boolean that states whether the two objects are the same
+     */
+    public boolean equals(Tetrimino t) {
+        //if the shape (rotation and type of tetrimino) is the same, then they are equal
+        for (int row = 0; row < shape.length; row++) {
+            for (int col = 0; col < shape[0].length; col++) {
+                if (shape[row][col] != t.getShape()[row][col]) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
 } //end of Tetrimino class

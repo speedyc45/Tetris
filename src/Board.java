@@ -122,7 +122,7 @@ public class Board {
         } else {
             //end the game (game over!)
             System.out.println("Cannot add a new tetrimino.\nGame Over");
-            System.exit(0);
+            GameWindow.gameOver();
         }
 
     } //end of addTetrimino method
@@ -477,6 +477,8 @@ public class Board {
     public static void clearLine() {
         boolean runLoop;
         int clearLineRow;
+        int rowsClearedAtOnce = 0;
+        double scoreMultiplier = 0.5;
 
         //check if there is a line to be cleared, and allow the loop to run if so
         clearLineRow = clearLineCheck(0);
@@ -489,6 +491,8 @@ public class Board {
         //continue clearing lines while it's possible
         while (runLoop) {
             rowsCleared++;
+            rowsClearedAtOnce++;
+            scoreMultiplier += 0.5;
 
             //delete the row that should be cleared
             for (int col = 0; col < boardArray[0].length; col++) {
@@ -502,7 +506,6 @@ public class Board {
                 }
             }
 
-
             //check if there are any other lines to clear, and continue the loop if there are
             clearLineRow = clearLineCheck(clearLineRow);
 
@@ -513,9 +516,25 @@ public class Board {
             }
         }
 
+        //update the score
+        score += rowsClearedAtOnce * 10 * scoreMultiplier;
+
         //check if a level up is neccesary, and then level up (if needed)
         if (Math.floor(rowsCleared/(Board.getLevel()*15)) == 1) {
             GameWindow.levelUp();
+        }
+    }
+
+    /*
+     * PRE: Null
+     * POST: The boardArray is "cleared" (filled with 0s)
+     */
+    public static void clearBoard() {
+        //set every value in the board equal to 0
+        for (int row = 0; row < boardArray.length; row++) {
+            for (int col = 0; col < boardArray[0].length; col++) {
+                boardArray[row][col] = 0;
+            }
         }
     }
 
@@ -568,5 +587,23 @@ public class Board {
      * POST: Sets the blockSpawned int as the given int
      */
     public static void setBlocksSpawned(int num) { blocksSpawned = num; }
+
+    /*
+     * PRE: Null
+     * POST: Returns a string with the board int[][] array
+     */
+    public String toString() {
+        String report = "";
+        report += "-------------------------\n";
+        report += "Board:\n";
+        for (int x = 0; x < boardArray.length; x++) {
+            for (int y = 0; y < boardArray[0].length; y++) {
+                report += "" + boardArray[x][y];
+            }
+            report += "\n";
+        }
+
+        return report;
+    }
 
 } //end of Board class

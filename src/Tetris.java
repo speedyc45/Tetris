@@ -12,10 +12,14 @@
 //import the necessary libraries
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import javax.swing.*;
 
 /*
- * DESC: main Tetris class (runs upon launch)
+ * DESC: Main Tetris class (runs upon launch), only contains starting line (easy to change if needed)
  */
 public class Tetris {
     //initialize the startMenu object
@@ -26,9 +30,9 @@ public class Tetris {
      */
     public static void main(String[] args) {
         startMenu = new StartWindow();
-    } //end of main method
+    }
 
-} //end of main Tetris class
+}
 
 /*
  * DESC: StartWindow class is a JFrame window that is created on launch and can run the game, show instructions, or show the title screen
@@ -53,7 +57,8 @@ class StartWindow extends JFrame{
      * POST: StartWindow object created, which displays a GUI interface for the user to interact with (main menu)
      */
     public StartWindow() {
-        //set the size, location, close operation, and title of the window //TODO
+        //set the size, location, close operation, title of the window, initialize the buttons, panels, button size array,
+        //and images, and add a window listener
         mainMenuPanel = new JPanel();
         mainMenuNorthPanel = new JPanel();
         mainMenuCenterPanel = new JPanel();
@@ -67,9 +72,6 @@ class StartWindow extends JFrame{
         instructionsGameButton = new JButton("Game Instructions");
         mainMenuButtonSizes[0] = 140;
         mainMenuButtonSizes[1] = 26;
-        /*backgroundColor[0] = 145;
-        backgroundColor[1] = 187;
-        backgroundColor[2] = 255;*/
 
         //set the main menu's default closing operation, size,
         //location, and add the mainMenuPanel
@@ -146,6 +148,11 @@ class StartWindow extends JFrame{
             System.exit(0);
         }
 
+        //check if the game is running, and pause it if needed
+        if (GameWindow.getGameStart()) {
+            GameWindow.pauseGame(true);
+        }
+
         //otherwise ask the user if they want to close the application
         System.out.println("Close application process called...");
         int closeApp = JOptionPane.showConfirmDialog(null, "Are you sure you want to close the application?",
@@ -156,6 +163,9 @@ class StartWindow extends JFrame{
             System.out.println("Closing application...");
             System.exit(0);
         }
+
+        //otherwise, unpause the game
+        GameWindow.pauseGame(false);
     }
 }
 
@@ -170,20 +180,25 @@ class GameWindow extends JFrame{
     private static int dropSpeed = 1000;
     private static boolean gameStart = false;
     private static boolean gamePaused = false;
+    private static boolean gameOver = false;
+    private static boolean gameRestart = false;
+    private static String highScore;
+    private static String highScoreName;
     private PaintSurface canvas;
     private static Tetrimino current;
     private static Tetrimino[] nextTetrimino = new Tetrimino[4];
-    private static Timer t2;
+    private static Timer dropTetriminoTimer;
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Creates a GameWindow object
      */
     public GameWindow() {
-        //set the dimensions, title, closing operation, and center it in the screen
+        //set the dimensions, title, closing operation, center it in the screen, and add a window listener
         this.setSize(width, height);
         this.setTitle("Callum's Tetris");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowListener());
         this.setLocationRelativeTo(null);
 
         //make a canvas for animating and add it to the frame
@@ -207,16 +222,17 @@ class GameWindow extends JFrame{
             nextTetrimino[x] = new Tetrimino((int)Math.floor(Math.random() * 7 + 1));
         }
 
-        //create a new tetrimino to start the game
-        newTetrimino();
+        loadHighScore();
 
-        //make the frame (window) visible
+        //create a new tetrimino to start the game and make the frame (window) visible
+        newTetrimino();
         this.setVisible(true);
     } //end of GameWindow constructor method
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Clears any full horizontal lines in the boardArray, and creates a new tetrimino at the top of the boardArray
+     *       (if possible)
      */
     public static void newTetrimino() {
         //clear any lines if possible, then create another tetrimino
@@ -235,31 +251,38 @@ class GameWindow extends JFrame{
         Board.addTetrimino(current);
         Board.setBlocksSpawned(Board.getBlocksSpawned() + 1);
 
-        //if the game has not started, created the timer for dropping the tetrimino
+        //if the game has not started, created the timer for dropping the tetrimino (and set the initial delay to 0ms)
         if (!gameStart) {
-            t2 = new Timer(dropSpeed, new ActionListener(){
+            dropTetriminoTimer = new Timer(dropSpeed, new ActionListener(){
                 @Override
                 public void actionPerformed (ActionEvent evt)
                 {
                     Board.tetriminoDrop(current, false);
                 }
             });
-            t2.start();
+            dropTetriminoTimer.setInitialDelay(0);
+            dropTetriminoTimer.start();
             gameStart = true;
+        }
+
+        //if the game is restart, restart the timer
+        if (gameRestart) {
+            dropTetriminoTimer.start();
+            gameRestart = false;
         }
     }
 
     /*
-     * PRE:
+     * PRE: A multiple of 15 must be reached on the # of lines cleared
      * POST: Increases the drop speed of the tetriminoes
      */
     public static void levelUp() {
         if (Board.getLevel() < 4) {
             Board.setLevel(Board.getLevel() + 1);
             dropSpeed -= 200;
-            t2.setDelay(dropSpeed);
+            dropTetriminoTimer.setDelay(dropSpeed);
 
-            System.out.println("Level up - level " + Board.getLevel());
+            System.out.println("Level up - level: " + Board.getLevel());
         } else {
             System.out.println("Max level reached.");
         }
@@ -267,70 +290,186 @@ class GameWindow extends JFrame{
     }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Read in the highScore and highScoreName from a txt file
+     */
+    private static void loadHighScore() {
+        //load the previous highscore from a file
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("data/highscore.txt"));
+            highScoreName = br.readLine();
+            highScore = br.readLine();
+
+            br.close();
+        } catch (Exception e) {
+            System.out.println("Error loading in high score. Setting to 0.");
+            highScoreName = "John Smith";
+            highScore = "0";
+        }
+    }
+
+    /*
+     * PRE: No more tetriminos can "spawn"
+     * POST: Overrides the high score (if surpassed), and resets the game (if the user wishes, otherwise the application is closed)
+     */
+    public static void gameOver() {
+        String name = "";
+        char letter;
+        int playAgain;
+        boolean invalidName = true;
+
+        //stop the drop tetrimino timer, and set gameOver to true
+        dropTetriminoTimer.stop();
+        gameOver = true;
+
+        //loop to ensure the user enters a valid name (letters only)
+        while (invalidName) {
+            name = JOptionPane.showInputDialog("Game Over\nPlease enter your name: ");
+
+            while (name == null) {
+                name = JOptionPane.showInputDialog("Game Over\nPlease enter your name: ");
+            }
+
+            for (int x = 0; x < name.length(); x++) {
+                letter = name.charAt(x);
+
+                if (!Character.isLetter(letter) && !(letter == ' ')) {
+                    break;
+                } else if (x == name.length()-1) {
+                    invalidName = false;
+                }
+            }
+        }
+
+        //saves the score and name if it's a new highscore
+        if (Integer.parseInt(highScore) < Board.getScore()) {
+            try {
+                PrintWriter pw = new PrintWriter(new FileWriter("data/highscore.txt"));
+                pw.println(name);
+                pw.println(Board.getScore());
+
+                pw.close();
+            } catch (Exception e) {
+                System.out.println("Error saving the new highscore.");
+            }
+        }
+
+        //ask if the user wants to play again, and restart if application if so (otherwise, close it)
+        playAgain = JOptionPane.showConfirmDialog(null, "Do you want to play again?",
+                "Play Again?", JOptionPane.YES_NO_OPTION);
+
+        //if the user wants to play again, reset the game and start again, otherwise close the application
+        if (playAgain == 0) {
+            //update the highscore and highscore name
+            loadHighScore();
+
+            //reset the boardArray, tetrimino array, score, level, blocksSpawned, and gameOver
+            for (int x = 0; x < nextTetrimino.length; x++) {
+                nextTetrimino[x] = new Tetrimino((int)Math.floor(Math.random() * 7 + 1));
+            }
+            Board.clearBoard();
+            Board.setScore(0);
+            Board.setLevel(1);
+            Board.setBlocksSpawned(0);
+            gameOver = false;
+
+            //set the gameRestart flag to true, and create a new tetrimino to start the game
+            gameRestart = true;
+            newTetrimino();
+        } else {
+            System.exit(0);
+        }
+    }
+
+    /*
+     * PRE: Null
+     * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and rotation direction
      */
     public static void rotateTetrimino(int rot) { Board.tetriminoRotate(current, rot); }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and move direction
      */
     public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Takes a boolean parameter which cannot be null
+     * POST: Speeds up the falling tetrimino speed (if given a true value), otherwise it returns the drop speed to its normal setting
      */
     public static void setSoftDropTetrimino(boolean drop) {
         if (drop) {
-            t2.setDelay(100);
+            //stop the timer, set it's delay to 100ms, then restart the timer
+            dropTetriminoTimer.stop();
+            dropTetriminoTimer.setDelay(100);
+            dropTetriminoTimer.start();
         } else {
-            t2.setDelay(dropSpeed);
+            //set the delay time back to its normal setting
+            dropTetriminoTimer.setDelay(dropSpeed);
         }
     }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Calls the tetriminoInstantDrop method in the board class, passing the current tetrimino object, and calls the
+     *       resetDropTimer method
      */
-    public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); resetDropTimer(); }
+    public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); dropTetriminoTimer.restart(); }
+
 
     /*
-     * PRE:
-     * POST:
-     */
-    private static void resetDropTimer() { t2.stop(); Board.tetriminoDrop(current, false); t2.start(); }
-
-    /*
-     * PRE:
-     * POST:
+     * PRE: Takes a boolean that cannot be null
+     * POST: Stops the dropTetriminoTimer if given true and sets gamePaused to true, or starts the dropTetriminoTimer if given false and sets gamePaused to false
      */
     public static void pauseGame(boolean pause) {
         if (pause) {
             gamePaused = true;
-            t2.stop();
+            dropTetriminoTimer.stop();
         } else {
             gamePaused = false;
-            t2.start();
+            dropTetriminoTimer.start();
         }
     }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Returns the array of Tetrimino objects nextTetrimino
      */
     public static Tetrimino[] getNextTetrimino() { return nextTetrimino; }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Returns the boolean gameStart
+     */
+    public static boolean getGameStart() { return gameStart; }
+
+    /*
+     * PRE: Null
+     * POST: Returns the boolean gamePaused
      */
     public static boolean getGamePaused() { return gamePaused; }
 
     /*
-     * PRE:
-     * POST:
+     * PRE: Null
+     * POST: Returns the boolean gameOver
+     */
+    public static boolean getGameOver() { return gameOver; }
+
+    /*
+     * PRE: Null
+     * POST: Returns the string highScore
+     */
+    public static String getHighScore() { return highScore; }
+
+    /*
+     * PRE: Null
+     * POST: Returns the string highScoreName
+     */
+    public static String getHighScoreName() { return highScoreName; }
+
+    /*
+     * PRE: Null
+     * POST: Returns a string that states the width and height of the GameWindow
      */
     public String toString() {
         String report = "";
@@ -346,117 +485,125 @@ class GameWindow extends JFrame{
 } //end of GameWindow class
 
 /*
- * DESC:
+ * DESC: Class that allows for the custom rendering of images and other graphics with precision (coordinates) in a GUI
  */
 class PaintSurface extends JComponent {
     //define the necessary variables
-    private Image gridBackground; //note: border length is 4 pixels
-    private Image holdBackground;
-    private Image nextBackground;
+    private Image gridBackground = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
+    private Image nextBackground = new ImageIcon("assets\\Tetris_Grid_Next_Alt.png").getImage();
+    //private Image holdBackground = new ImageIcon("assets\\Tetris_Grid_Hold.png").getImage();
     private Image block;
     private final int backgroundOffsetX = 5;
     private final int backgroundOffsetY = 5;
     private static final int gridBackgroundWidth = 210;
+    private static final int gridBackgroundLength = 409;
     private int blockPosX = backgroundOffsetX + 4;
     private int blockPosY = backgroundOffsetY + 5;
     private Board tetrisBoard = new Board();
+    private Graphics2D colouredText;
 
     /*
-     * PRE:
+     * PRE: Takes a Graphics object that cannot be null
      * POST: "Repaints" the canvas by redrawing any graphics inside it
      */
     public void paint(Graphics g) {
-        //create the images for the game, and then draw them (and the score factors)
-        gridBackground = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
-        nextBackground = new ImageIcon("assets\\Tetris_Grid_Next_Alt.png").getImage();
-        holdBackground = new ImageIcon("assets\\Tetris_Grid_Hold.png").getImage();
+        //draw the images for the game (and the score factors)
         g.drawImage(gridBackground, backgroundOffsetX, backgroundOffsetY, null);
         g.drawImage(nextBackground, backgroundOffsetX + gridBackgroundWidth + 10, backgroundOffsetY, null);
-        g.drawString("SCORE: " + Board.getScore(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 35);
-        g.drawString("LEVEL: " + Board.getLevel(), blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 15);
-        g.drawString("LINES CLEARED: " + Board.getRowsCleared(), blockPosX*2 + 20*Board.COLUMNS, 20*Board.ROWS + 5);
+        g.drawString("HIGHSCORE NAME:", blockPosX * 2 + 20 * Board.COLUMNS -2, 20 * Board.ROWS - 95);
+        g.drawString(GameWindow.getHighScoreName(), blockPosX * 2 + 20 * Board.COLUMNS -2, 20 * Board.ROWS - 75);
+        g.drawString("HIGHSCORE: " + GameWindow.getHighScore(), blockPosX * 2 + 20 * Board.COLUMNS -2, 20 * Board.ROWS - 55);
+        g.drawString("SCORE: " + Board.getScore(), blockPosX * 2 + 20 * Board.COLUMNS -2, 20 * Board.ROWS - 35);
+        g.drawString("LEVEL: " + Board.getLevel(), blockPosX * 2 + 20 * Board.COLUMNS -2, 20 * Board.ROWS - 15);
+        g.drawString("LINES CLEARED: " + Board.getRowsCleared(), blockPosX * 2 + 20 * Board.COLUMNS -2, 20 * Board.ROWS + 5);
 
-        //check if the game is paused, and add the "Game Paused" text if so
-        if (GameWindow.getGamePaused()) {
-            g.drawString("GAME PAUSED", blockPosX*2 + 20*Board.COLUMNS,  20*Board.ROWS - 65);
-        }
-
-        //draw the board (check for any values in the board, and draw the correct block for it - in the correct position)
-        for (int x = 0; x < Board.ROWS; x++) {
-            for (int y = 0; y < Board.COLUMNS; y++) {
-                switch (tetrisBoard.getBoardArray()[x][y]) {
-                    case 0:
-                        //no block, do nothing
-                        break;
-                    case 1:
-                        block = Board.blockBlue.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    case 2:
-                        block = Board.blockOrange.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    case 3:
-                        block = Board.blockYellow.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    case 4:
-                        block = Board.blockGreen.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    case 5:
-                        block = Board.blockPink.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    case 6:
-                        block = Board.blockPurple.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    case 7:
-                        block = Board.blockLightBlue.getImage();
-                        g.drawImage(block, blockPosX + y*20, blockPosY + x*20, null);
-                        break;
-                    default:
-                        //TODO ERROR!
-                        break;
-                }
-            }
-        }
-
-        //draw the next tetriminoes (check for any values in the board, and draw the correct block for it - in the correct position)
-        for (int t = 0; t < GameWindow.getNextTetrimino().length; t++) {
-            for (int x = 0; x < 2; x++) {
-                Outer: for (int y = 0; y < GameWindow.getNextTetrimino()[t].getSize(); y++) {
-                    switch (GameWindow.getNextTetrimino()[t].getShape()[x][y]) {
+        if (GameWindow.getGameOver()) { //check if the game is over, and add the "Game Over" text if so
+            colouredText = (Graphics2D)g;
+            colouredText.setColor(Color.white);
+            colouredText.drawString("GAME OVER", backgroundOffsetX + gridBackgroundWidth/2 - 37, backgroundOffsetY + gridBackgroundLength/2);
+        } else if (GameWindow.getGamePaused()) { //check if the game is paused, and add the "Game Paused" text if so
+            colouredText = (Graphics2D)g;
+            colouredText.setColor(Color.white);
+            colouredText.drawString("GAME PAUSED", backgroundOffsetX + gridBackgroundWidth/2 - 43, backgroundOffsetY + gridBackgroundLength/2);
+        } else {
+            //draw the board (check for any values in the board, and draw the correct block for it - in the correct position)
+            for (int x = 0; x < Board.ROWS; x++) {
+                for (int y = 0; y < Board.COLUMNS; y++) {
+                    switch (tetrisBoard.getBoardArray()[x][y]) {
                         case 0:
                             //no block, do nothing
-                            continue Outer;
+                            break;
                         case 1:
                             block = Board.blockBlue.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         case 2:
                             block = Board.blockOrange.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         case 3:
                             block = Board.blockYellow.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         case 4:
                             block = Board.blockGreen.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         case 5:
                             block = Board.blockPink.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         case 6:
                             block = Board.blockPurple.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         case 7:
                             block = Board.blockLightBlue.getImage();
+                            g.drawImage(block, blockPosX + y * 20, blockPosY + x * 20, null);
                             break;
                         default:
                             //TODO ERROR!
                             break;
                     }
-                    g.drawImage(block, blockPosX + y * 20 + gridBackgroundWidth + 10, blockPosY + x * 20 + t * 60, null);
+                }
+            }
+
+            //draw the next tetriminoes (check for any values in the board, and draw the correct block for it - in the correct position)
+            for (int t = 0; t < GameWindow.getNextTetrimino().length; t++) {
+                for (int x = 0; x < 2; x++) {
+                    Outer:
+                    for (int y = 0; y < GameWindow.getNextTetrimino()[t].getSize(); y++) {
+                        switch (GameWindow.getNextTetrimino()[t].getShape()[x][y]) {
+                            case 0:
+                                //no block, do nothing
+                                continue Outer;
+                            case 1:
+                                block = Board.blockBlue.getImage();
+                                break;
+                            case 2:
+                                block = Board.blockOrange.getImage();
+                                break;
+                            case 3:
+                                block = Board.blockYellow.getImage();
+                                break;
+                            case 4:
+                                block = Board.blockGreen.getImage();
+                                break;
+                            case 5:
+                                block = Board.blockPink.getImage();
+                                break;
+                            case 6:
+                                block = Board.blockPurple.getImage();
+                                break;
+                            case 7:
+                                block = Board.blockLightBlue.getImage();
+                                break;
+                            default:
+                                //TODO ERROR!
+                                break;
+                        }
+                        g.drawImage(block, blockPosX + y * 20 + gridBackgroundWidth + 10, blockPosY + x * 20 + t * 60, null);
+                    }
                 }
             }
         }
@@ -495,7 +642,7 @@ class KeyListener implements java.awt.event.KeyListener {
     public void keyTyped(KeyEvent e) { }
 
     /*
-     * PRE: /TODO/
+     * PRE: Takes a KeyEvent object that cannot be null
      * POST: The corresponding method (to the key press) is called, and the system flags the key as "pressed"
      */
     @Override
@@ -531,11 +678,10 @@ class KeyListener implements java.awt.event.KeyListener {
                 GameWindow.pauseGame(true);
             }
         }
-        //System.out.println("Key Pressed: " + e.getKeyCode());
     }
 
     /*
-     * PRE: /TODO/
+     * PRE: Takes a KeyEvent object that cannot be null
      * POST: The system will unflag a pressed key when it is released
      */
     public void keyReleased(KeyEvent e) {
@@ -573,9 +719,7 @@ class WindowListener implements java.awt.event.WindowListener {
      * POST: The closeApplication method is called (asks the user if they wish to close the program)
      */
     @Override
-    public void windowClosing(WindowEvent e) {
-        StartWindow.closeApplication(false);
-    }
+    public void windowClosing(WindowEvent e) { StartWindow.closeApplication(false); }
 
     @Override
     public void windowDeactivated(WindowEvent e) { }
@@ -596,7 +740,7 @@ class WindowListener implements java.awt.event.WindowListener {
 class ButtonListener implements java.awt.event.ActionListener {
 
     /*
-     * PRE: /TODO/
+     * PRE:  Takes an ActionEvent object that cannot be null
      * POST: Calls the required method to start the game, show the game logo, or show the instructions
      */
     @Override
