@@ -1,4 +1,5 @@
-/*
+
+/***********************************************************************************************************************
  * Tetris.java
  * Description: A GUI based game where the user attempts to manage falling blocks and fill lines to earn points. If the
  *              tower of falling blocks becomes too high, the user loses and their score is recorded. The game begins in
@@ -6,8 +7,8 @@
  *
  * Coded by: Callum Kipin
  * Date Started: Oct 2nd, 2018
- * Date Finished: /TODO/
- */
+ * Date Finished: Nov 16th, 2018
+ ***********************************************************************************************************************/
 
 //import the necessary libraries
 import java.awt.*;
@@ -18,25 +19,27 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import javax.swing.*;
 
-/*
+/********************************************************
  * DESC: Main Tetris class (runs upon launch), only contains starting line (easy to change if needed)
- */
+ ********************************************************/
 public class Tetris {
     //initialize the startMenu object
     public static StartWindow startMenu = null;
 
-    /* PRE: Null
+    /********************************************************
+     * DESC:
+     * PRE: Null
      * POST: StartWindow constructor is called and startMenu object is given the reference
-     */
+     ********************************************************/
     public static void main(String[] args) {
         startMenu = new StartWindow();
     }
 
 }
 
-/*
+/********************************************************
  * DESC: StartWindow class is a JFrame window that is created on launch and can run the game, show instructions, or show the title screen
- */
+ ********************************************************/
 class StartWindow extends JFrame{
     //define the variables for the main menu window
     private JPanel mainMenuPanel;
@@ -52,10 +55,11 @@ class StartWindow extends JFrame{
     private ImageIcon tetrisInstructions; //320x245 pixels
     private int[] mainMenuButtonSizes = new int[2]; //x,y
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: StartWindow object created, which displays a GUI interface for the user to interact with (main menu)
-     */
+     ********************************************************/
     public StartWindow() {
         //set the size, location, close operation, title of the window, initialize the buttons, panels, button size array,
         //and images, and add a window listener
@@ -112,36 +116,40 @@ class StartWindow extends JFrame{
         this.setVisible(true);
     } //end of StartWindow constructor
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Main menu window is made invisible, and the game window is created and opens to replace it
-     */
+     ********************************************************/
     public void StartGame() {
         this.setVisible(false);
         System.out.println(this);
         new GameWindow();
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: The gameLogo image is changed to show instructions for the user
-     */
+     ********************************************************/
     public void showInstructions() {
         gameLogo.setIcon(tetrisInstructions);
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: The gameLogo image is changed to show the logo and contact info for the user
-     */
+     ********************************************************/
     public void showAboutGame() {
         gameLogo.setIcon(tetrisLogo);
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: A boolean variable is sent as a parameter
      * POST: The system will close (if parameter == true) or ask the user if the wish to close (and close if necessary)
-     */
+     ********************************************************/
     public static void closeApplication(boolean forceClose) {
         //if the application is being forceClosed, close it
         if (forceClose) {
@@ -169,10 +177,11 @@ class StartWindow extends JFrame{
         GameWindow.pauseGame(false);
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Returns a string of basic information of the StartWindow object
-     */
+     ********************************************************/
     public String toString() {
         String report = "";
 
@@ -188,9 +197,9 @@ class StartWindow extends JFrame{
     }
 } //end of StartWindow class
 
-/*
+/********************************************************
  * DESC: Class for the main game window (inheriting from JFrame) that manages the game and displays the GUI for the user
- */
+ ********************************************************/
 class GameWindow extends JFrame{
     //initialize the necessary variables
     public static final int WIDTH = 360;
@@ -208,10 +217,11 @@ class GameWindow extends JFrame{
     private static Tetrimino[] nextTetrimino = new Tetrimino[4];
     private static Timer dropTetriminoTimer;
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Creates a GameWindow object
-     */
+     ********************************************************/
     public GameWindow() {
         //set the dimensions, title, closing operation, center it in the screen, and add a window listener
         this.setSize(WIDTH, HEIGHT);
@@ -248,11 +258,12 @@ class GameWindow extends JFrame{
         this.setVisible(true);
     } //end of GameWindow constructor method
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Clears any full horizontal lines in the boardArray, and creates a new tetrimino at the top of the boardArray
      *       (if possible)
-     */
+     ********************************************************/
     public static void newTetrimino() {
         //clear any lines if possible, then create another tetrimino
         Board.clearLine();
@@ -291,10 +302,11 @@ class GameWindow extends JFrame{
         }
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: A multiple of 15 must be reached on the # of lines cleared
      * POST: Increases the drop speed of the tetriminoes
-     */
+     ********************************************************/
     public static void levelUp() {
         if (Board.getLevel() < 4) {
             Board.setLevel(Board.getLevel() + 1);
@@ -308,10 +320,11 @@ class GameWindow extends JFrame{
 
     }
 
-    /*
-     * PRE: Null
+    /********************************************************
+     * DESC:
+     * PRE: highscore.txt is created, within the data folder, and has the highscore and name (formatted correctly)
      * POST: Read in the highScore and highScoreName from a txt file
-     */
+     ********************************************************/
     private static void loadHighScore() {
         //load the previous highscore from a file
         try {
@@ -327,10 +340,11 @@ class GameWindow extends JFrame{
         }
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: No more tetriminos can "spawn"
      * POST: Overrides the high score (if surpassed), and resets the game (if the user wishes, otherwise the application is closed)
-     */
+     ********************************************************/
     public static void gameOver() {
         String name = "";
         char letter;
@@ -400,22 +414,25 @@ class GameWindow extends JFrame{
         }
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and rotation direction
-     */
+     ********************************************************/
     public static void rotateTetrimino(int rot) { Board.tetriminoRotate(current, rot); }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and move direction
-     */
+     ********************************************************/
     public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Takes a boolean parameter which cannot be null
      * POST: Speeds up the falling tetrimino speed (if given a true value), otherwise it returns the drop speed to its normal setting
-     */
+     ********************************************************/
     public static void setSoftDropTetrimino(boolean drop) {
         if (drop) {
             //stop the timer, set it's delay to 100ms, then restart the timer
@@ -428,18 +445,20 @@ class GameWindow extends JFrame{
         }
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Calls the tetriminoInstantDrop method in the board class, passing the current tetrimino object, and calls the
      *       resetDropTimer method
-     */
+     ********************************************************/
     public static void instantDropTetrimino() { Board.tetriminoInstantDrop(current); dropTetriminoTimer.restart(); }
 
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Takes a boolean that cannot be null
      * POST: Stops the dropTetriminoTimer if given true and sets gamePaused to true, or starts the dropTetriminoTimer if given false and sets gamePaused to false
-     */
+     ********************************************************/
     public static void pauseGame(boolean pause) {
         if (pause) {
             gamePaused = true;
@@ -450,46 +469,53 @@ class GameWindow extends JFrame{
         }
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Returns the array of Tetrimino objects nextTetrimino
-     */
+     ********************************************************/
     public static Tetrimino[] getNextTetrimino() { return nextTetrimino; }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Returns the boolean gameStart
-     */
+     ********************************************************/
     public static boolean getGameStart() { return gameStart; }
 
-    /*
-     * PRE: Null
+    /********************************************************
+     * DESC:
+     * PRE: gamePaused is not null
      * POST: Returns the boolean gamePaused
-     */
+     ********************************************************/
     public static boolean getGamePaused() { return gamePaused; }
 
-    /*
-     * PRE: Null
-     * POST: Returns the boolean gameOver
-     */
+    /********************************************************
+     * DESC: Returns the boolean gameOver
+     * PRE: gameOver is not null
+     * POST: Returns a boolean
+     ********************************************************/
     public static boolean getGameOver() { return gameOver; }
 
-    /*
-     * PRE: Null
-     * POST: Returns the string highScore
-     */
+    /********************************************************
+     * DESC: Returns the string highScore
+     * PRE: highScore is not null
+     * POST: Returns a string
+     ********************************************************/
     public static String getHighScore() { return highScore; }
 
-    /*
-     * PRE: Null
-     * POST: Returns the string highScoreName
-     */
+    /********************************************************
+     * DESC: Returns the string highScoreName
+     * PRE: highScoreName is not null
+     * POST: Returns a string
+     ********************************************************/
     public static String getHighScoreName() { return highScoreName; }
 
-    /*
+    /********************************************************
+     * DESC: Returns a string that states the width and height of the GameWindow
      * PRE: Null
-     * POST: Returns a string that states the width and height of the GameWindow
-     */
+     * POST: Returns a string
+     ********************************************************/
     public String toString() {
         String report = "";
 
@@ -510,9 +536,9 @@ class GameWindow extends JFrame{
 
 } //end of GameWindow class
 
-/*
+/********************************************************
  * DESC: Class that allows for the custom rendering of images and other graphics with precision (coordinates) in a GUI
- */
+ ********************************************************/
 class PaintSurface extends JComponent {
     //define the necessary variables
     private Image gridBackground = new ImageIcon("assets\\Tetris_Grid_Background.png").getImage();
@@ -528,10 +554,11 @@ class PaintSurface extends JComponent {
     private Board tetrisBoard = new Board();
     private Graphics2D colouredText;
 
-    /*
+    /********************************************************
+     * DESC: "Repaints" the canvas by redrawing any graphics inside it
      * PRE: Takes a Graphics object that cannot be null
-     * POST: "Repaints" the canvas by redrawing any graphics inside it
-     */
+     * POST: ???
+     ********************************************************/
     public void paint(Graphics g) {
         //draw the images for the game (and the score factors)
         g.drawImage(gridBackground, backgroundOffsetX, backgroundOffsetY, null);
@@ -636,10 +663,11 @@ class PaintSurface extends JComponent {
 
     } //end of paint method
 
-    /*
+    /********************************************************
+     * DESC: Returns a string of basic information of the PaintSurface object
      * PRE: Null
-     * POST: Returns a string of basic information of the PaintSurface object
-     */
+     * POST: Returns a string
+     ********************************************************/
     public String toString() {
         String report = "";
 
@@ -654,9 +682,9 @@ class PaintSurface extends JComponent {
 
 } //end of PaintSurface class
 
-/*
+/********************************************************
  * DESC: Class that handles key input during the game's runtime
- */
+ ********************************************************/
 class KeyListener implements java.awt.event.KeyListener {
     private static boolean releaseKeyReturn = false;
     private static boolean releaseKeySpace = false;
@@ -668,10 +696,11 @@ class KeyListener implements java.awt.event.KeyListener {
     @Override
     public void keyTyped(KeyEvent e) { }
 
-    /*
+    /********************************************************
+     * DESC: Calls the corresponding method (to the key press), and the system flags the key as "pressed"
      * PRE: Takes a KeyEvent object that cannot be null
-     * POST: The corresponding method (to the key press) is called, and the system flags the key as "pressed"
-     */
+     * POST: Respective flag to the key press is set to true
+     ********************************************************/
     @Override
     public void keyPressed(KeyEvent e ) {
         if (e.getKeyCode() == 32 && !releaseKeySpace) { //check for the space bar, and if it's being pressed again
@@ -707,10 +736,11 @@ class KeyListener implements java.awt.event.KeyListener {
         }
     }
 
-    /*
+    /********************************************************
+     * DESC: Checks for what key is released, and unflags that key if it is one of the used keys
      * PRE: Takes a KeyEvent object that cannot be null
      * POST: The system will unflag a pressed key when it is released
-     */
+     ********************************************************/
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == 32) { //check for the left arrow key
             releaseKeySpace = false;
@@ -729,10 +759,11 @@ class KeyListener implements java.awt.event.KeyListener {
         System.out.println("Key Released: " + e.getKeyCode());
     }
 
-    /*
+    /********************************************************
+     * DESC: Returns a string of basic information of the KeyListener object
      * PRE: Null
-     * POST: Returns a string of basic information of the KeyListener object
-     */
+     * POST: Returns a string
+     ********************************************************/
     public String toString() {
         String report = "";
 
@@ -750,9 +781,9 @@ class KeyListener implements java.awt.event.KeyListener {
     }
 } //end of KeyListener class
 
-/*
+/********************************************************
  * DESC: Class that acts as a listener for when the user interacts with the frame (window) buttons (e.g. close, minimize, etc.)
- */
+ ********************************************************/
 class WindowListener implements java.awt.event.WindowListener {
 
     @Override
@@ -761,10 +792,11 @@ class WindowListener implements java.awt.event.WindowListener {
     @Override
     public void windowClosed(WindowEvent e) { }
 
-    /*
-     * PRE: /TODO/
-     * POST: The closeApplication method is called (asks the user if they wish to close the program)
-     */
+    /********************************************************
+     * DESC: This method is called when the user presses the close button on a window, and runs the closeApplication() method
+     * PRE: Null
+     * POST: The closeApplication method is called
+     ********************************************************/
     @Override
     public void windowClosing(WindowEvent e) { StartWindow.closeApplication(false); }
 
@@ -780,10 +812,10 @@ class WindowListener implements java.awt.event.WindowListener {
     @Override
     public void windowOpened(WindowEvent e) { }
 
-    /*
+    /********************************************************
      * PRE: Null
      * POST: Returns a string of basic information of the WindowListener object
-     */
+     ********************************************************/
     public String toString() {
         String report = "";
 
@@ -795,15 +827,16 @@ class WindowListener implements java.awt.event.WindowListener {
     }
 }
 
-/*
+/********************************************************
  * DESC: Class that acts as a listener for when the user interacts with one of the buttons in the GUI
- */
+ ********************************************************/
 class ButtonListener implements java.awt.event.ActionListener {
 
-    /*
-     * PRE:  Takes an ActionEvent object that cannot be null
+    /********************************************************
+     * DESC: Checks which GUI button has been clicked, and calls the required method for that button
+     * PRE:  Takes an ActionEvent object that cannot be null and should be from one of the three GUI buttons
      * POST: Calls the required method to start the game, show the game logo, or show the instructions
-     */
+     ********************************************************/
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -820,10 +853,11 @@ class ButtonListener implements java.awt.event.ActionListener {
         }
     }
 
-    /*
+    /********************************************************
+     * DESC: Returns a string of basic information of the ButtonListener object
      * PRE: Null
-     * POST: Returns a string of basic information of the ButtonListener object
-     */
+     * POST: Returns a string
+     ********************************************************/
     public String toString() {
         String report = "";
 

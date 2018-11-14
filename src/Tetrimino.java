@@ -1,7 +1,7 @@
 
-/*
+/********************************************************
  * DESC: Class that represents a "Tetrimino" - a falling block within the Tetris game
- */
+ ********************************************************/
 public class Tetrimino {
     //initialize the necessary variables
     private int[][] shape;
@@ -13,18 +13,20 @@ public class Tetrimino {
     public static final int ROTATE_RIGHT = 1;
 
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Runs the Tetrimino(int shapeNum) constructor with a value of 1
-     */
+     ********************************************************/
     public Tetrimino() {
         this(1);
     } //end of Tetrimino default constructor
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Creates a copy of a given Tetrimino object
-     */
+     ********************************************************/
     public Tetrimino(Tetrimino t) {
         shapeNum = t.getShapeNum();
 
@@ -38,10 +40,11 @@ public class Tetrimino {
         yCoord = t.getyCoord();
     }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Creates a Tetrimino given a number to decide the shape
-     */
+     ********************************************************/
     public Tetrimino(int shapeNum) {
         this.shapeNum = shapeNum;
 
@@ -134,11 +137,12 @@ public class Tetrimino {
 
     } //end of Tetrimino(int shapeNum) constructor
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: An integer of -1 or +1 must be passed as a parameter
      * POST: Rotates a Tetrimino's shape so that it pivots upon the central axis 90 degrees left
      *       based on this image: https://vignette.wikia.nocookie.net/tetrisconcept/images/3/3d/SRS-pieces.png/revision/latest?cb=20060626173148
-     */
+     ********************************************************/
     public void rotate(int rotateDir) {
         int[][] newShape;
         int rotateLeftCounter = 0;
@@ -211,28 +215,32 @@ public class Tetrimino {
 
     } //end of rotate method
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Returns the shapeNum int
-     */
+     ********************************************************/
     public int getShapeNum() { return this.shapeNum; }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Returns the size int
-     */
+     ********************************************************/
     public int getSize() { return this.size; }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Returns the shape int[][]
-     */
+     ********************************************************/
     public int[][] getShape() { return this.shape; }
 
-    /*
+    /********************************************************
+     * DESC:
      * PRE: Null
      * POST: Return the xCoord int
-     */
+     ********************************************************/
     public int getxCoord() {return xCoord;}
 
     /*
