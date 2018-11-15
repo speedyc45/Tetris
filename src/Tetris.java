@@ -405,6 +405,7 @@ class GameWindow extends JFrame{
             Board.setScore(0);
             Board.setLevel(1);
             Board.setBlocksSpawned(0);
+            Board.setRowsCleared(0);
             gameOver = false;
 
             //set the gameRestart flag to true, and create a new tetrimino to start the game

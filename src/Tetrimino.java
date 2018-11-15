@@ -243,28 +243,28 @@ public class Tetrimino {
      ********************************************************/
     public int getxCoord() {return xCoord;}
 
-    /*
+    /********************************************************
      * PRE: Null
      * POST: Return the yCoord int
-     */
+     ********************************************************/
     public int getyCoord() {return yCoord;}
 
-    /*
+    /********************************************************
      * PRE: Sent an int parameter
      * POST: Sets the xCoord int to the given parameter
-     */
+     ********************************************************/
     public void setxCoord(int x) {this.xCoord = x;}
 
-    /*
+    /********************************************************
      * PRE: Sent an int parameter
      * POST: Sets the yCoord int to the given parameter
-     */
+     ********************************************************/
     public void setyCoord(int y) {this.yCoord = y;}
 
-    /*
+    /********************************************************
      * PRE: Null
      * POST: Returns a string with the shape int[][] array
-     */
+     ********************************************************/
     public String toString() {
         String report = "";
         report += "-------------------------\n";
@@ -279,10 +279,10 @@ public class Tetrimino {
         return report;
     }
 
-    /*
+    /********************************************************
      * PRE: Takes a Tetrimino object as a parameter which cannot be null
      * POST: Returns a boolean that states whether the two objects are the same
-     */
+     ********************************************************/
     public boolean equals(Tetrimino t) {
         //if the shape (rotation and type of tetrimino) is the same, then they are equal
         for (int row = 0; row < shape.length; row++) {
