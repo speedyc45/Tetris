@@ -20,16 +20,15 @@ import java.io.PrintWriter;
 import javax.swing.*;
 
 /********************************************************
- * DESC: Main Tetris class (runs upon launch), only contains starting line (easy to change if needed)
+ * DESC: Main Tetris class (runs upon launch), only contains starting method (easy to change if needed)
  ********************************************************/
 public class Tetris {
-    //initialize the startMenu object
     public static StartWindow startMenu = null;
 
     /********************************************************
-     * DESC:
+     * DESC: Starts the program and creates a new StartWindow object
      * PRE: Null
-     * POST: StartWindow constructor is called and startMenu object is given the reference
+     * POST: startMenu object is initialized
      ********************************************************/
     public static void main(String[] args) {
         startMenu = new StartWindow();
@@ -56,9 +55,9 @@ class StartWindow extends JFrame{
     private int[] mainMenuButtonSizes = new int[2]; //x,y
 
     /********************************************************
-     * DESC:
+     * DESC: A StartWindow object is created, which displays a GUI interface for the user to interact with (main menu)
      * PRE: Null
-     * POST: StartWindow object created, which displays a GUI interface for the user to interact with (main menu)
+     * POST: Creates a StartWindow object
      ********************************************************/
     public StartWindow() {
         //set the size, location, close operation, title of the window, initialize the buttons, panels, button size array,
@@ -117,38 +116,37 @@ class StartWindow extends JFrame{
     } //end of StartWindow constructor
 
     /********************************************************
-     * DESC:
+     * DESC: The main menu window is made invisible, and the game window is created and opens to replace it
      * PRE: Null
-     * POST: Main menu window is made invisible, and the game window is created and opens to replace it
+     * POST: The visible boolean for this is set to false, and a GameWindow object is created
      ********************************************************/
     public void StartGame() {
         this.setVisible(false);
-        System.out.println(this);
         new GameWindow();
     }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: The gameLogo image is changed to show instructions for the user
+     * DESC: The gameLogo image is changed to show instructions for the user
+     * PRE: gameLogl and tetrisInstructions cannot be null
+     * POST: Calls the setIcon() method for the gameLogo object and passes it the tetrisInstructions object
      ********************************************************/
     public void showInstructions() {
         gameLogo.setIcon(tetrisInstructions);
     }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: The gameLogo image is changed to show the logo and contact info for the user
+     * DESC: The gameLogo image is changed to show the logo and contact info for the user
+     * PRE: gameLogo and tetrisLogo cannot be null
+     * POST: Calls the setIcon() method for the gameLogo object and passes it the tetrisLogo object
      ********************************************************/
     public void showAboutGame() {
         gameLogo.setIcon(tetrisLogo);
     }
 
     /********************************************************
-     * DESC:
+     * DESC: The system will close (if parameter == true) or ask the user if the wish to close (and close if necessary)
      * PRE: A boolean variable is sent as a parameter
-     * POST: The system will close (if parameter == true) or ask the user if the wish to close (and close if necessary)
+     * POST: Application may close, and the pauseGame() method is sent true until the end of the method, then false
      ********************************************************/
     public static void closeApplication(boolean forceClose) {
         //if the application is being forceClosed, close it
@@ -178,9 +176,9 @@ class StartWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
+     * DESC: Returns a string of basic information of the StartWindow object
      * PRE: Null
-     * POST: Returns a string of basic information of the StartWindow object
+     * POST: Returns a string
      ********************************************************/
     public String toString() {
         String report = "";
@@ -218,7 +216,7 @@ class GameWindow extends JFrame{
     private static Timer dropTetriminoTimer;
 
     /********************************************************
-     * DESC:
+     * DESC: Creates a new GameWindow object with the default values
      * PRE: Null
      * POST: Creates a GameWindow object
      ********************************************************/
@@ -259,10 +257,12 @@ class GameWindow extends JFrame{
     } //end of GameWindow constructor method
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Clears any full horizontal lines in the boardArray, and creates a new tetrimino at the top of the boardArray
+     * DESC: Clears any full horizontal lines in the boardArray, and creates a new Tetrimino at the top of the boardArray
      *       (if possible)
+     * PRE: nextTetrimino[0], current, gameRestart, and gameStart cannot be null
+     * POST: dropTetriminoTimer is not null, a new Tetrimino is added to the boardArray, a Tetrimino is removed from the
+     *       nextTetrimino array and a new one added, increases the number of blocks spawned by one, and restarts the
+     *       timer if necessary
      ********************************************************/
     public static void newTetrimino() {
         //clear any lines if possible, then create another tetrimino
@@ -295,7 +295,7 @@ class GameWindow extends JFrame{
             gameStart = true;
         }
 
-        //if the game is restart, restart the timer
+        //if the game is restarted, restart the timer
         if (gameRestart) {
             dropTetriminoTimer.start();
             gameRestart = false;
@@ -303,9 +303,9 @@ class GameWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
-     * PRE: A multiple of 15 must be reached on the # of lines cleared
-     * POST: Increases the drop speed of the tetriminoes
+     * DESC: Increases the drop speed of the falling Tetrimino blocks
+     * PRE: dropSpeed and dropTetriminoTimer cannot be null
+     * POST: Decreases the tick time (dropSpeed) by 200ms for the dropTetriminoTimer, and increases the level by 1
      ********************************************************/
     public static void levelUp() {
         if (Board.getLevel() < 4) {
@@ -321,9 +321,9 @@ class GameWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
+     * DESC: Reads in the highScore and highScoreName from a txt file
      * PRE: highscore.txt is created, within the data folder, and has the highscore and name (formatted correctly)
-     * POST: Read in the highScore and highScoreName from a txt file
+     * POST: Sets the highScoreName and highScore variables as information read from a txt file
      ********************************************************/
     private static void loadHighScore() {
         //load the previous highscore from a file
@@ -341,9 +341,10 @@ class GameWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
+     * DESC: Overrides the high score (if surpassed), and resets the game (if the user wishes, otherwise the application is closed)
      * PRE: No more tetriminos can "spawn"
-     * POST: Overrides the high score (if surpassed), and resets the game (if the user wishes, otherwise the application is closed)
+     * POST: The highScore and highScoreName variables may be overiden (if the score is surpassed) on both the file and in local
+     *       variables, and the game is either reset or the application is closed
      ********************************************************/
     public static void gameOver() {
         String name = "";
@@ -415,23 +416,24 @@ class GameWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
+     * DESC: Calls a method to rotate the current Tetrimino object in a specified direction
+     * PRE: rot and current cannot be null
      * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and rotation direction
      ********************************************************/
     public static void rotateTetrimino(int rot) { Board.tetriminoRotate(current, rot); }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
+     * DESC: Calls a method to move the current Tetrimino object in the specified direction
+     * PRE: dir and current cannot be null
      * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and move direction
      ********************************************************/
     public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
     /********************************************************
-     * DESC:
-     * PRE: Takes a boolean parameter which cannot be null
-     * POST: Speeds up the falling tetrimino speed (if given a true value), otherwise it returns the drop speed to its normal setting
+     * DESC: Speeds up the falling tetrimino speed (if given a true value), otherwise it returns the drop speed to its normal setting
+     * PRE: drop, dropTetriminoTimer, and dropSpeed cannot be null
+     * POST: Dencreases the dropTetriminoTimer tick speed to 100ms and resets it, or returns the timer to it's previous tick speed
+     *       (depending on the boolean given)
      ********************************************************/
     public static void setSoftDropTetrimino(boolean drop) {
         if (drop) {
@@ -446,8 +448,9 @@ class GameWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
+     * DESC: Calls methods to move the falling Tetrimino (current) to the bottom of the board (as far down as possible),
+     *       then resets the dropTetriminoTimer (to spawn another block instantly - without any delay)
+     * PRE: current object cannot be null, and the dropTetriminoTimer object cannot be null
      * POST: Calls the tetriminoInstantDrop method in the board class, passing the current tetrimino object, and calls the
      *       resetDropTimer method
      ********************************************************/
@@ -455,9 +458,10 @@ class GameWindow extends JFrame{
 
 
     /********************************************************
-     * DESC:
-     * PRE: Takes a boolean that cannot be null
-     * POST: Stops the dropTetriminoTimer if given true and sets gamePaused to true, or starts the dropTetriminoTimer if given false and sets gamePaused to false
+     * DESC: "Pauses" the game by stopping the falling of blocks (stops the dropTimer), or "unpauses" it
+     * PRE: pause is not null
+     * POST: Stops the dropTetriminoTimer if given true and sets gamePaused to true, or starts the
+     *       dropTetriminoTimer if given false and sets gamePaused to false
      ********************************************************/
     public static void pauseGame(boolean pause) {
         if (pause) {
@@ -470,23 +474,23 @@ class GameWindow extends JFrame{
     }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Returns the array of Tetrimino objects nextTetrimino
+     * DESC: Returns the array of Tetrimino objects nextTetrimino
+     * PRE: nextTetrimino is not null
+     * POST: Returns an array of Tetrimino objects
      ********************************************************/
     public static Tetrimino[] getNextTetrimino() { return nextTetrimino; }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Returns the boolean gameStart
+     * DESC: Returns the boolean gameStart
+     * PRE: gameStart is not null
+     * POST: Returns a boolean
      ********************************************************/
     public static boolean getGameStart() { return gameStart; }
 
     /********************************************************
-     * DESC:
+     * DESC: Returns the boolean gamePaused
      * PRE: gamePaused is not null
-     * POST: Returns the boolean gamePaused
+     * POST: Returns a boolean
      ********************************************************/
     public static boolean getGamePaused() { return gamePaused; }
 
@@ -555,9 +559,11 @@ class PaintSurface extends JComponent {
     private Graphics2D colouredText;
 
     /********************************************************
-     * DESC: "Repaints" the canvas by redrawing any graphics inside it
+     * DESC: "Repaints" the canvas by redrawing any graphics inside it, checking whether any conditions are met for the GUI
+     *       (e.g. gamePaused or gameOver) and restricts what is drawn and draws specific graphics for the scenario. Generally
+     *       draws the main Tetris board, upcoming blocks, scores, level, and more)
      * PRE: Takes a Graphics object that cannot be null
-     * POST: ???
+     * POST:
      ********************************************************/
     public void paint(Graphics g) {
         //draw the images for the game (and the score factors)
@@ -782,7 +788,8 @@ class KeyListener implements java.awt.event.KeyListener {
 } //end of KeyListener class
 
 /********************************************************
- * DESC: Class that acts as a listener for when the user interacts with the frame (window) buttons (e.g. close, minimize, etc.)
+ * DESC: Class that acts as a listener for when the user interacts with the frame (window) buttons (e.g. close, minimize, etc.),
+ *       and has methods that are called when they are interacted with
  ********************************************************/
 class WindowListener implements java.awt.event.WindowListener {
 
