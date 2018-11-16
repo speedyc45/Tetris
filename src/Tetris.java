@@ -746,7 +746,7 @@ class KeyListener implements java.awt.event.KeyListener {
     /********************************************************
      * DESC: Checks for what key is released, and unflags that key if it is one of the used keys
      * PRE: Takes a KeyEvent object that cannot be null
-     * POST: The system will unflag a pressed key when it is released
+     * POST: The system will unflag a pressed key it recognizes
      ********************************************************/
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == 32) { //check for the left arrow key
@@ -768,7 +768,7 @@ class KeyListener implements java.awt.event.KeyListener {
 
     /********************************************************
      * DESC: Returns a string of basic information of the KeyListener object
-     * PRE: Null
+     * PRE: N/A
      * POST: Returns a string
      ********************************************************/
     public String toString() {
@@ -802,7 +802,7 @@ class WindowListener implements java.awt.event.WindowListener {
 
     /********************************************************
      * DESC: This method is called when the user presses the close button on a window, and runs the closeApplication() method
-     * PRE: Null
+     * PRE: N/A
      * POST: The closeApplication method is called
      ********************************************************/
     @Override
@@ -821,8 +821,9 @@ class WindowListener implements java.awt.event.WindowListener {
     public void windowOpened(WindowEvent e) { }
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns a string of basic information of the WindowListener object
+     * DESC: Returns a String of basic information of the WindowListener object
+     * PRE: N/A
+     * POST: Returns a String
      ********************************************************/
     public String toString() {
         String report = "";
