@@ -27,7 +27,7 @@ public class Tetris {
 
     /********************************************************
      * DESC: Starts the program and creates a new StartWindow object
-     * PRE: Null
+     * PRE: N/A
      * POST: startMenu object is initialized
      ********************************************************/
     public static void main(String[] args) {
@@ -56,7 +56,7 @@ class StartWindow extends JFrame{
 
     /********************************************************
      * DESC: A StartWindow object is created, which displays a GUI interface for the user to interact with (main menu)
-     * PRE: Null
+     * PRE: N/A
      * POST: Creates a StartWindow object
      ********************************************************/
     public StartWindow() {
@@ -117,8 +117,8 @@ class StartWindow extends JFrame{
 
     /********************************************************
      * DESC: The main menu window is made invisible, and the game window is created and opens to replace it
-     * PRE: Null
-     * POST: The visible boolean for this is set to false, and a GameWindow object is created
+     * PRE: N/A
+     * POST: The visible boolean is set to false, and a GameWindow object is created
      ********************************************************/
     public void StartGame() {
         this.setVisible(false);
@@ -127,7 +127,7 @@ class StartWindow extends JFrame{
 
     /********************************************************
      * DESC: The gameLogo image is changed to show instructions for the user
-     * PRE: gameLogl and tetrisInstructions cannot be null
+     * PRE: gameLogo and tetrisInstructions cannot be null
      * POST: Calls the setIcon() method for the gameLogo object and passes it the tetrisInstructions object
      ********************************************************/
     public void showInstructions() {
@@ -177,7 +177,7 @@ class StartWindow extends JFrame{
 
     /********************************************************
      * DESC: Returns a string of basic information of the StartWindow object
-     * PRE: Null
+     * PRE: N/A
      * POST: Returns a string
      ********************************************************/
     public String toString() {
@@ -217,7 +217,7 @@ class GameWindow extends JFrame{
 
     /********************************************************
      * DESC: Creates a new GameWindow object with the default values
-     * PRE: Null
+     * PRE: N/A
      * POST: Creates a GameWindow object
      ********************************************************/
     public GameWindow() {
@@ -233,8 +233,8 @@ class GameWindow extends JFrame{
         this.add(canvas, BorderLayout.CENTER);
         this.addKeyListener(new KeyListener());
 
-        //create a timer for repainting the animation every 20 (ms?)
-        //credit to Java for Dummies
+        //create a timer for repainting the animation every 20ms
+        //credit to Java for Dummies (taught me how to do this and how it functions)
         Timer t = new Timer(ANIMATION_REFRESH_RATE, new ActionListener(){
             @Override
             public void actionPerformed (ActionEvent evt)
@@ -260,9 +260,8 @@ class GameWindow extends JFrame{
      * DESC: Clears any full horizontal lines in the boardArray, and creates a new Tetrimino at the top of the boardArray
      *       (if possible)
      * PRE: nextTetrimino[0], current, gameRestart, and gameStart cannot be null
-     * POST: dropTetriminoTimer is not null, a new Tetrimino is added to the boardArray, a Tetrimino is removed from the
-     *       nextTetrimino array and a new one added, increases the number of blocks spawned by one, and restarts the
-     *       timer if necessary
+     * POST: dropTetriminoTimer is not null, boardArray is altered, nextTetrimino array is altered, blocksSpawned++, and
+     *       calls dropTetriminoTimer.start() if necessary
      ********************************************************/
     public static void newTetrimino() {
         //clear any lines if possible, then create another tetrimino
@@ -305,7 +304,7 @@ class GameWindow extends JFrame{
     /********************************************************
      * DESC: Increases the drop speed of the falling Tetrimino blocks
      * PRE: dropSpeed and dropTetriminoTimer cannot be null
-     * POST: Decreases the tick time (dropSpeed) by 200ms for the dropTetriminoTimer, and increases the level by 1
+     * POST: Decreases the tick time (dropSpeed) by 200ms for the dropTetriminoTimer, and increases level by 1
      ********************************************************/
     public static void levelUp() {
         if (Board.getLevel() < 4) {
@@ -419,14 +418,14 @@ class GameWindow extends JFrame{
     /********************************************************
      * DESC: Calls a method to rotate the current Tetrimino object in a specified direction
      * PRE: rot and current cannot be null
-     * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and rotation direction
+     * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and int rot
      ********************************************************/
     public static void rotateTetrimino(int rot) { Board.tetriminoRotate(current, rot); }
 
     /********************************************************
      * DESC: Calls a method to move the current Tetrimino object in the specified direction
      * PRE: dir and current cannot be null
-     * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and move direction
+     * POST: Calls the tetriminoRotate method in the board class, passing the current tetrimino and int dir
      ********************************************************/
     public static void moveTetrimino(int dir) { Board.tetriminoMove(current, dir); }
 
@@ -518,7 +517,7 @@ class GameWindow extends JFrame{
 
     /********************************************************
      * DESC: Returns a string that states the width and height of the GameWindow
-     * PRE: Null
+     * PRE: N/A
      * POST: Returns a string
      ********************************************************/
     public String toString() {
@@ -564,7 +563,7 @@ class PaintSurface extends JComponent {
      *       (e.g. gamePaused or gameOver) and restricts what is drawn and draws specific graphics for the scenario. Generally
      *       draws the main Tetris board, upcoming blocks, scores, level, and more)
      * PRE: Takes a Graphics object that cannot be null
-     * POST:
+     * POST: Various images are shown to the user through the GUI
      ********************************************************/
     public void paint(Graphics g) {
         //draw the images for the game (and the score factors)
@@ -672,7 +671,7 @@ class PaintSurface extends JComponent {
 
     /********************************************************
      * DESC: Returns a string of basic information of the PaintSurface object
-     * PRE: Null
+     * PRE: N/A
      * POST: Returns a string
      ********************************************************/
     public String toString() {
@@ -864,7 +863,7 @@ class ButtonListener implements java.awt.event.ActionListener {
 
     /********************************************************
      * DESC: Returns a string of basic information of the ButtonListener object
-     * PRE: Null
+     * PRE: N/A
      * POST: Returns a string
      ********************************************************/
     public String toString() {

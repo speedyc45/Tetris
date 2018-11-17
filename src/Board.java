@@ -2,7 +2,7 @@
 import javax.swing.*;
 
 /********************************************************
- * DESC: Class that manages the Tetris game board (positioning and collision)
+ * DESC: Class that manages the Tetris game board (positioning and collision of blocks within an int array)
  ********************************************************/
 public class Board {
     //initialize the necessary variables
@@ -25,7 +25,7 @@ public class Board {
 
     /********************************************************
      * DESC: Creates a default Board object and initializes the 2D int array for the board as empty
-     * PRE: Null
+     * PRE: N/A
      * POST: A Board object is created and it's 2D int array is initialized with 0s
      ********************************************************/
     public Board() {
@@ -84,27 +84,22 @@ public class Board {
     } //end of addTetriminoCheck method
 
     /********************************************************
-     * DESC: Adds a Tetrimino block to the board (according to https://harddrop.com/wiki/Spawn_Location locations)
+     * DESC: Adds a Tetrimino block to the board (according to https://harddrop.com/wiki/Spawn_Location locations) if possible
      * PRE: Takes a Tetrimino object as a parameter that cannot be null
      * POST: Adds the Tetrimino's shape[][] to the top center of the boardArray[][] if possible
      ********************************************************/
     public static void addTetrimino(Tetrimino t) {
-        //if the tetrimino can be added
+        //if the tetrimino can be added, add it to its correct position, otherwise run gameOver()
         if (addTetriminoCheck(t)) {
-            //System.out.println("Add tetrimino: true");
-
-            //if the tetrimino is the cube, spawn it in the center
             if (t.getSize() == 2) {
-
-                //add the tetrimino to the board array
+                //if the tetrimino is the cube, spawn it in the center of the boardArray
                 for (int x = 0; x < 2; x++) {
                     for (int y = 0; y < t.getSize(); y++) {
                         boardArray[x][y+4] = t.getShape()[x][y];
                     }
                 }
-            } else if (t.getSize() == 3) { //if the tetrimino is a standard 3 size, spawn in the default location
-
-                //add the tetrimino to the board array
+            } else if (t.getSize() == 3) {
+                //if the tetrimino is a standard 3 size, spawn it in the default location of the boardArray
                 for (int row = 0; row < 2; row++) {
                     for (int col = 0; col < t.getSize(); col++) {
                         if (t.getShape()[row][col] != 0) {
@@ -113,16 +108,14 @@ public class Board {
 
                     }
                 }
-            } else if(t.getSize() == 4) { //if the tetrimino is a line piece, spawn on the top row
-
-                //add the tetrimino to the board array
+            } else if(t.getSize() == 4) {
+                //if the tetrimino is a line piece, spawn it on the 2nd top row of the board Array
                 for (int col = 0; col < t.getSize(); col++) {
                     boardArray[1][col+3] = t.getShape()[1][col];
                 }
             }
 
         } else {
-            //end the game (game over!)
             System.out.println("Cannot add a new tetrimino.\nGame Over");
             GameWindow.gameOver();
         }
@@ -133,7 +126,7 @@ public class Board {
      * DESC: Updates the board (moves blocks if necessary inside the board array)
      * PRE: Takes a Tetrimino object and boolean as parameters that cannot be null
      * POST: The yCoord of the given Tetrimino object is increased by one and the respective values in the boardArray
-     *       increased by one in the "y-axis'
+     *       increased by one in the "y-axis"
      ********************************************************/
     public static void tetriminoDrop(Tetrimino t, boolean override) {
         int yCoord = t.getyCoord();
@@ -155,13 +148,13 @@ public class Board {
     } //end of update method
 
     /********************************************************
+     * DESC: Check to see if the Tetrimino's move is possible (compare arrays for conflicts)
      * PRE: Takes a Tetrimino object as a parameter that cannot be null
-     * POST: Check to see if the Tetrimino's move is possible (compare arrays for conflicts)
+     * POST: Returns a boolean
      ********************************************************/
     private static boolean tetriminoDropCheck(Tetrimino t) {
         int xCoord = t.getxCoord();
         int yCoord = t.getyCoord();
-        int lowestBlockHeight = 0;
 
         //first: find the lowest block in the tetrimino, check if it will go past the bottom of the grid
         Outer: for (int bottomRow = t.getSize()-1; bottomRow > 0; bottomRow--) {
@@ -191,12 +184,11 @@ public class Board {
     } //end of tetriminoDropCheck method
 
     /********************************************************
+     * DESC: Moves the tetrimino in the given horizontal direction if possible
      * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
-     * POST: Moves the tetrimino in the given horizontal direction
+     * POST: boardArray is altered and the Tetrimino object's xcoord are increased or decreased by 1 if possible
      ********************************************************/
     public static void tetriminoMove(Tetrimino t, int direction) {
-        //direction 1=left, 2=right
-
         //erase the tetrimino (so it can't collide with itself) before checking for collisions, then move the Tetrimino
         //if possible
         erase(t);
@@ -224,8 +216,9 @@ public class Board {
     }
 
     /********************************************************
+     * DESC: Checks if the move of a tetrimino is valid
      * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
-     * POST: checks if the move of a tetrimino is valid
+     * POST: A boolean is returned
      ********************************************************/
     private static boolean tetriminoMoveCheck(Tetrimino t, int direction) {
         //define and initialize the local variables
@@ -234,7 +227,7 @@ public class Board {
 
         //check if the horizontal move is possible, return true if so (false otherwise)
         switch (direction) {
-            case LEFT: //left
+            case LEFT:
                 //find the leftmost block in the tetrimino, check if it will go past the left edge of the grid
                 Outer: for (int col = 0; col < t.getShape()[0].length; col++) {
                     for (int row = 0; row < t.getShape().length; row++) {
@@ -258,7 +251,7 @@ public class Board {
                     }
                 }
                 break;
-            case RIGHT: //right
+            case RIGHT:
                 //find the rightmost block in the tetrimino, check if it will go past the right edge of the grid
                 Outer: for (int col = t.getSize()-1; col > 0; col--) {
                     for (int row = 0; row < t.getShape().length; row++) {
@@ -288,12 +281,11 @@ public class Board {
     }
 
     /********************************************************
+     * DESC: Rotates the tetrimino in the given direction if possible
      * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
-     * POST: Rotates the tetrimino in the given direction
+     * POST: The given Tetrimino's shape may be altered and the boardArray may be altered
      ********************************************************/
     public static void tetriminoRotate(Tetrimino t, int rotation) {
-        //rotation 1=left, 2=right
-
         //erase the tetrimino (so it can't collide with itself) before checking for collisions, rotating if possible,
         //then redrawing the tetrimino
         erase(t);
@@ -306,8 +298,9 @@ public class Board {
     } //end of tetriminoRotate method
 
     /********************************************************
+     * DESC: Returns a boolean which states whether it is possible for the given Tetrimino to rotate on the board
      * PRE: Takes a Tetrimino object as a parameter that cannot be null, and takes an int which must be 1 or 2
-     * POST: Returns a boolean which states whether it is possible for the given Tetrimino to rotate on the board
+     * POST: Returns a boolean
      ********************************************************/
     private static boolean tetriminoRotateCheck(Tetrimino t, int rotation) {
         //rotate the Tetrimino's shape array
@@ -347,8 +340,9 @@ public class Board {
     } //end of tetriminoRotateCheck method
 
     /********************************************************
+     * DESC: Instantly drops a Tetrimino as far down the board as is possible
      * PRE: Takes a Tetrimino object as a parameter that cannot be null
-     * POST: Instantly drops a Tetrimino as far down the board as is possible
+     * POST: boardArray is altered
      ********************************************************/
     public static void tetriminoInstantDrop(Tetrimino t) {
 
@@ -363,8 +357,9 @@ public class Board {
     } //end of tetriminoInstantDrop method
 
     /********************************************************
+     * DESC: Removes the respective integer values in the board array of the given Tetrimino object ("erases" it)
      * PRE: Takes a Tetrimino object as a parameter that cannot be null
-     * POST: Removes the respective integer values in the board array of the given Tetrimino object ("erases" it)
+     * POST: boardArray is altered
      ********************************************************/
     public static void erase(Tetrimino t) {
         int size = t.getSize();
@@ -408,8 +403,9 @@ public class Board {
     } //end of erase method
 
     /********************************************************
+     * DESC: Recreates the respective integer values in the board array of the given Tetrimino object ("redraws" it)
      * PRE: Takes a Tetrimino object as a parameter that cannot be null
-     * POST: Recreates the respective integer values in the board array of the given Tetrimino object ("redraws" it)
+     * POST: Alters boardArray
      ********************************************************/
     public static void reDraw(Tetrimino t) {
         int yCoord = t.getyCoord();
@@ -441,9 +437,10 @@ public class Board {
     } //end of reDraw method
 
     /********************************************************
-     * PRE: Takes an int which must be between 0 and 19 inclusive
-     * POST: Returns an integer which signifies which row to clear (if it is a continuous row), or returns 20 if no row
+     * DESC: Returns an integer which signifies which row to clear (if it is a continuous row), or returns 20 if no row
      *       should be cleared
+     * PRE: Takes an int which must be between 0 and 19 inclusive
+     * POST: Returns an integer
      ********************************************************/
     private static int clearLineCheck(int startRow) {
         int rowCounter = 0;
@@ -470,10 +467,12 @@ public class Board {
     }
 
     /********************************************************
-     * PRE: Null
-     * POST: Removes a horizontal row of integer values from the board array clearLineCheck() returns an int between 0
-     *       and 19 inclusive, and moves all integer values in the rows above down one row. Will also call the levelUp()
-     *       method in the GameWindow class if enough lines are cleared (speeding up the drop speed of Tetriminoes)
+     * DESC: Removes a horizontal row of integer values from the board array given by clearLineCheck() (returns an int
+     *       between 0 and 19 inclusive signifying the row number), and moves all integer values in the rows above down
+     *       one row. Will also call the levelUp() method in the GameWindow class if enough lines are cleared (speeding
+     *       up the drop speed of Tetriminoes)
+     * PRE: N/A
+     * POST: Alters boardArray
      ********************************************************/
     public static void clearLine() {
         boolean runLoop;
@@ -527,8 +526,9 @@ public class Board {
     }
 
     /********************************************************
-     * PRE: Null
-     * POST: The boardArray is "cleared" (filled with 0s)
+     * DESC: The boardArray is "cleared" (filled with 0s)
+     * PRE: N/A
+     * POST: boardArray is set to default values
      ********************************************************/
     public static void clearBoard() {
         //set every value in the board equal to 0
@@ -539,65 +539,75 @@ public class Board {
         }
     }
 
-    /*
-     * PRE: Null
-     * POST: Returns the boardArray int[][]
-     */
+    /********************************************************
+     * DESC: Returns the boardArray int[][]
+     * PRE: N/A
+     * POST: Returns an int[][]
+     ********************************************************/
     public static int[][] getBoardArray() {
         return boardArray;
     }
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns the rowsCleared int
+     * DESC: Returns the rowsCleared int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public static int getRowsCleared() { return rowsCleared; }
 
     /********************************************************
+     * DESC: Sets rowsCleared as num
      * PRE: num cannot be null
      * POST: Sets rowsCleared as num
      ********************************************************/
     public static void setRowsCleared(int num) { rowsCleared = num; }
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns the level int
+     * DESC: Returns the level int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public static int getLevel() { return level; }
 
     /********************************************************
+     * DESC: Sets the level int as the given int
      * PRE: Takes an int parameter which cannot be null
      * POST: Sets the level int as the given int
      ********************************************************/
     public static void setLevel(int num) { level = num; }
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns the score int
+     * DESC: Returns the score int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public static int getScore() { return score; }
 
     /********************************************************
+     * DESC: Sets the score int as the given int
      * PRE: Takes an int parameter which cannot be null
      * POST: Sets the score int as the given int
      ********************************************************/
     public static void setScore(int num) { score = num; }
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns the blocksSpawned int
+     * DESC: Returns the blocksSpawned int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public static int getBlocksSpawned() { return blocksSpawned; }
 
     /********************************************************
+     * DESC: Sets the blockSpawned int as the given int
      * PRE: Takes an int parameter which cannot be null
      * POST: Sets the blockSpawned int as the given int
      ********************************************************/
     public static void setBlocksSpawned(int num) { blocksSpawned = num; }
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns a string with the board int[][] array
+     * DESC: Returns a string with the board int[][] array
+     * PRE: N/A
+     * POST: Returns a string
      ********************************************************/
     public String toString() {
         String report = "";

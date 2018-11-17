@@ -1,6 +1,7 @@
 
 /********************************************************
- * DESC: Class that represents a "Tetrimino" - a falling block within the Tetris game
+ * DESC: Class that represents a "Tetrimino" - a falling block within the Tetris game that spawns at the top of the board
+ *       and is controlled by the player
  ********************************************************/
 public class Tetrimino {
     //initialize the necessary variables
@@ -14,21 +15,22 @@ public class Tetrimino {
 
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Runs the Tetrimino(int shapeNum) constructor with a value of 1
+     * DESC: Runs the Tetrimino(int shapeNum) constructor with a value of 1
+     * PRE: N/A
+     * POST: A default Tetrimino object is created
      ********************************************************/
     public Tetrimino() {
         this(1);
     } //end of Tetrimino default constructor
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Creates a copy of a given Tetrimino object
+     * DESC: Creates a copy of a given Tetrimino object
+     * PRE: N/A
+     * POST: Creates a Tetrimino object
      ********************************************************/
     public Tetrimino(Tetrimino t) {
         shapeNum = t.getShapeNum();
+        size = t.getSize();
 
         for (int x = 0; x < shapeNum; x++) {
             for (int y = 0; y < shapeNum; y++) {
@@ -41,9 +43,9 @@ public class Tetrimino {
     }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Creates a Tetrimino given a number to decide the shape
+     * DESC: Creates a Tetrimino given a number to decide the shape
+     * PRE: N/A
+     * POST: Creates a Tetrimino object
      ********************************************************/
     public Tetrimino(int shapeNum) {
         this.shapeNum = shapeNum;
@@ -132,16 +134,13 @@ public class Tetrimino {
                 break;
         } //end of shape deciding switch statement
 
-        //test print statement
-        System.out.println("New Block - ROW: " + yCoord + " COL:" + xCoord + " Size:" + size + " Shape:" + shapeNum);
-
     } //end of Tetrimino(int shapeNum) constructor
 
     /********************************************************
-     * DESC:
-     * PRE: An integer of -1 or +1 must be passed as a parameter
-     * POST: Rotates a Tetrimino's shape so that it pivots upon the central axis 90 degrees left
+     * DESC: Rotates a Tetrimino's shape so that it pivots upon the central axis 90 degrees left
      *       based on this image: https://vignette.wikia.nocookie.net/tetrisconcept/images/3/3d/SRS-pieces.png/revision/latest?cb=20060626173148
+     * PRE: An integer of -1 or +1 must be passed as a parameter
+     * POST: Alters shape
      ********************************************************/
     public void rotate(int rotateDir) {
         int[][] newShape;
@@ -216,54 +215,58 @@ public class Tetrimino {
     } //end of rotate method
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Returns the shapeNum int
+     * DESC: Returns the shapeNum int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public int getShapeNum() { return this.shapeNum; }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Returns the size int
+     * DESC: Returns the size int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public int getSize() { return this.size; }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Returns the shape int[][]
+     * DESC: Returns the shape int[][]
+     * PRE: N/A
+     * POST: Returns an int[][]
      ********************************************************/
     public int[][] getShape() { return this.shape; }
 
     /********************************************************
-     * DESC:
-     * PRE: Null
-     * POST: Return the xCoord int
+     * DESC: Returns the xCoord int
+     * PRE: N/A
+     * POST: Returns an int
      ********************************************************/
     public int getxCoord() {return xCoord;}
 
     /********************************************************
-     * PRE: Null
-     * POST: Return the yCoord int
-     ********************************************************/
-    public int getyCoord() {return yCoord;}
-
-    /********************************************************
+     * DESC: Sets the xCoord int to the given parameter
      * PRE: Sent an int parameter
      * POST: Sets the xCoord int to the given parameter
      ********************************************************/
     public void setxCoord(int x) {this.xCoord = x;}
 
     /********************************************************
+     * DESC: Returns the yCoord int
+     * PRE: N/A
+     * POST: Returns an int
+     ********************************************************/
+    public int getyCoord() {return yCoord;}
+
+    /********************************************************
+     * DESC: Sets the yCoord int to the given parameter
      * PRE: Sent an int parameter
      * POST: Sets the yCoord int to the given parameter
      ********************************************************/
     public void setyCoord(int y) {this.yCoord = y;}
 
     /********************************************************
-     * PRE: Null
-     * POST: Returns a string with the shape int[][] array
+     * DESC: Returns a string with the shape int[][] array
+     * PRE: N/A
+     * POST: Returns a string
      ********************************************************/
     public String toString() {
         String report = "";
@@ -280,8 +283,9 @@ public class Tetrimino {
     }
 
     /********************************************************
+     * DESC: Returns a boolean that states whether the two objects are the same
      * PRE: Takes a Tetrimino object as a parameter which cannot be null
-     * POST: Returns a boolean that states whether the two objects are the same
+     * POST: Returns a boolean
      ********************************************************/
     public boolean equals(Tetrimino t) {
         //if the shape (rotation and type of tetrimino) is the same, then they are equal
