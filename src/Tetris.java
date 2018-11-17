@@ -264,17 +264,27 @@ class GameWindow extends JFrame{
      *       calls dropTetriminoTimer.start() if necessary
      ********************************************************/
     public static void newTetrimino() {
-        //clear any lines if possible, then create another tetrimino
-        Board.clearLine();
+        Tetrimino temp = null;
+        boolean repeatedTetrimino = true;
 
-        //set the current tetrimino to the next in the list
+        //clear any lines if possible and set the current tetrimino to the next in the list
+        Board.clearLine();
         current = nextTetrimino[0];
 
         //shift all tetriminoes forward in the array, then make a new one for the end of the array
         for (int x = 0; x < 3; x++) {
             nextTetrimino[x] = nextTetrimino[x+1];
         }
-        nextTetrimino[3] = new Tetrimino((int)Math.floor(Math.random() * 7 + 1));
+
+        //check to see if the new Tetrimino equals the last one created, and create another if so - loop until it's different
+        //then add it to the array (if the Tetriminos are different)
+        while (repeatedTetrimino) {
+            temp = new Tetrimino((int)Math.floor(Math.random() * 7 + 1));
+            if (!temp.equals(nextTetrimino[2])) {
+                repeatedTetrimino = false;
+            }
+        }
+        nextTetrimino[3] = temp;
 
         //add the tetrimino to the board, and add one to the counter
         Board.addTetrimino(current);

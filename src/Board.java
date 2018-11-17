@@ -1,6 +1,5 @@
 
 import javax.swing.*;
-
 /********************************************************
  * DESC: Class that manages the Tetris game board (positioning and collision of blocks within an int array)
  ********************************************************/

@@ -1,4 +1,7 @@
 Debuggin Log for Tetris.java
+
+
+-------Problems and Solutions-------
 I encountered numerous errors when developing this game, mostly due to logical errors within my code. Here are a few:
 
 1) The Board.java class will run a seemingly impossible to reach statement that reaches an out of bounds array location in the game board. The "tetriminoDropCheck" method 
@@ -32,7 +35,21 @@ Solution: JOptionPane.showInputDialog("") should return a String, but if the use
 	  to see if it's valid).
 
 
-The use of arrays of objects within my program:
-In my program, Tetris, an array of Tetrimino objects is used to keep track of the upcoming Tetrimino blocks that will fall. This way, the program can tell the user which
-blocks will arrive next, and use the objects to display and later enter them into the board. 
+-------Test Cases-------
+Input:	  | A tetrimino reaches falls to the end of the board 	        | A tetrimino reaches falls to the end of the board 		   | A tetrimino falls on top of a block
+Expected: | The tetrimino will stop falling		      	        | The tetrimino will stop falling				   | The tetrimino stops falling
+Output:	  | An array out of bounds error is thrown from tetriminoDrop() | An array out of bounds error is thrown from tetriminoDropCheck() | The tetrimino falls through the block (no collision)
+Solution: | See above # 1						| See above # 1.5						   | See above # 2
 
+Input:	  | The user presses the return key to speed the falling of the Tetrimino  | The user closes the JOptionPane asking for a name |
+Expected: | The Tetrimino will fall at a faster pace 				   | The window will reopen			       |
+Output:   | The Tetrimino stops moving for ~1-2sec before falling at a faster rate | A null pointer error is thrown from gameOver()    |
+Solution: | See above # 3							   | See above # 4				       |
+
+
+-------Arrays of Objects Usage-------
+The use of arrays of objects within my program:
+In my program, Tetris, an array of Tetrimino objects is used to keep track of the upcoming Tetrimino blocks that will fall. There are four Tetrimino objects within the array,
+and they are pulled out consecutively as new blocks spawn (with all objects moving forward in the array (towards index 0) when the oldest Tetrimino object is removed, and 
+a new Tetrimino object is created and filled into the end of the array. This way, the program can tell the user which blocks will arrive next, and use the objects to display them
+before later entering them into the board. 
